@@ -1,0 +1,1377 @@
+============= RapidWright 2023.2.1-beta released on 2023-01-10 ================
+Notes:
+  - Add EDIFHierCellInst.isUniquified() (#918)
+  - [RWRoute] RouteNode to extend Node (#916)
+  - [DesignComparator] Fix whitespace (#937)
+  - RouteThruHelper.isRouteThruPIPAvailable(Design, WireInterface, WireIn (#915)
+  - Create a common interface for Node and Wire Objects (#892)
+  - DesignComparator - compares place and route data (#931)
+  - DesignTools.createMissingSitePinInsts() to infer SitePinInsts more smartly (#936)
+  - LUTTools.swapLutPinsFromPIPs() to warn when site pin not found (#934)
+  - [PhysNetlistReader] Warn and omit if PIP not found (#933)
+  - [PhysNetlistWriter] Handle PORT cells in GTY tiles (#930)
+  - [PhysNetlistWriter] Assume static net output BELPins to be sources too (#929)
+  - [PhysNetlistWriter] Fix stubs on static nets (#928)
+  - Get a Boolean from EDIFPropertyValue (#926)
+  - [PhysNetlistWriter] Infer direction of IOB's PAD.PAD BEL pin (#927)
+  - [RouteThruHelper] Move assertions, improve tests (#925)
+  - [RWRoute] Don't swap dist RAMs on 'H' BELs since A and WA are shared (#924)
+  - [PhysNetlistWriter] Recognize static source BELPins (e.g. LUT outputs) (#923)
+  - [RWRoute] Analyze a tile below the topmost arbitrary one (#921)
+  - Adding test for IOB placement (#903)
+  - [DesignTools.makeBlackBox()] Fixes routing issues in makeBlackBox() (#919)
+  - [ECOTools] Inline cell insertion (#917)
+  - RouterHelper.invertPossibleGndPinsToVccPins() to work on all invertible pins (#911)
+  - [RWRoute] GlobalSignalRouting static net router to use [A-H]MUX outputs (#914)
+  - [RWRoute] Fix exception for unrouteable connections (#913)
+  - Declare gradle dependency explicitly (#909)
+  - Fixes [Versal BELAttr] Parsing issue #912
+  - Add site pins when site routing through inverter BELs
+  - Fix UltraScale+ IBUF site routing
+  - Fix DSP pin mapping removals during site routing
+  - Adds support for special clock Node flag present in Versal designs
+  
+API Additions:
+  - com.xilinx.rapidwright.device.Node "public Node(Node node)"
+  - com.xilinx.rapidwright.device.Package "public synchronized PackagePin getPackagePin(Site site)"
+  - com.xilinx.rapidwright.device.Package "public String getPackagePinName(Site site)"
+
+
+============= RapidWright 2023.2.0-beta released on 2023-11-20 ================
+Notes:
+  - SLR Corner updates in device models and handling (#886)
+  - Updates Protobuf to 3.25.0 (#882)
+  - Updates/adds timestamp APIs (#883)
+  - Refactor PROHIBIT constraint for faster Tcl interpretation (#881)
+  - [PerformanceExplorer] Number pblocks by order in file, add first site in dir name (#867)
+  - DesignTools.createMissingSitePinInsts(Design) to ignore GLOBAL_USEDNET (#880)
+  - [RWRoute] Check source & sink pin reaches INT tile for dedicated connections (#878)
+  - ECOTools.createExitSitePinInst() to detect net aliases (#871)
+  - Rewrite RouterHelper.projectOutputPinToINTNode() with fixes (#877)
+  - EDIFNetlist.{generateParentNetMap,getNetAliases}() to be inout-aware (#876)
+  - DesignTools.createMissingSitePinInsts() to cope with net aliases (#875)
+  - Improve TestECOPlacementHelper (#874)
+  - Add com.xilinx.rapidwright.eco.ECOPlacementHelper (#870)
+  - RouteThruHelper to handle SiteInst == null (#866)
+  - Add RouteThruHelper.isRouteThruPIPAvailable(Design, Node, Node) overload (#865)
+  - Add DesignTools.getConnectedBELPins() (#864)
+  - RelocationTools fixes and more robust testing (#863)
+  - Fix TimingAndWirelengthReport.main() (#860)
+  - [Tests] Symlinks to absolute paths (#862)
+  - added check to see if Cell.getLogicalPinMapping() is null (#783)
+  - [DCP] Update tests to infer SitePinInsts (#857)
+  - Replace $(shell ...) with $(wildcard) and $(subst) in Makefile (#856)
+  - Undpreccate Design.createCell()
+  - Special clock flag fix for Versal DCPs
+  - More conservative SitePinInst creation upon DCP load
+  
+API Additions:
+  - com.xilinx.rapidwright.design.SitePinInst "public int getConnectedTileWire()"
+  - com.xilinx.rapidwright.device.Device "public int getSiteIndex(String siteName)"
+  - com.xilinx.rapidwright.device.Device "public int getSiteIndex(Site site)"
+  - com.xilinx.rapidwright.device.Device "public Site getSiteByIndex(int siteIndex)"
+  - com.xilinx.rapidwright.device.Device "public Site[] getAllSites()"
+  
+API Removals:
+  - com.xilinx.rapidwright.bitstream.ConfigRow "public ConfigRow()"  
+
+============= RapidWright 2023.1.4-beta released on 2023-10-20 ================
+Notes:
+  - Include RapidWright API Lib Javadoc in Gradle Build (#855)
+  - Add com.xilinx.rapidwright.eco.ECOTools package (#850)
+  - More Polynomial Generator improvements (#854)
+  - ReportRouteStatusResult.isFullyRouted() to check >0 logical net found (#852)
+  - Fixes for the PolynomialGenerator (tutorial) (#846)
+  - Test that Design.createModuleInst() copies static sources (#839)
+  - ModuleInst.place() to check both RAMB36/RAMB18 sites for overlap (#841)
+  - PartialRouter preprocessing and clock routing improvements (#843)
+  - Updates to Interchange README.md (#832)
+  - Simplify and make DesignTools.updatePinsIsRouted() more robust (#844)
+  - RouterHelper.invertPossibleGndPinsToVccPins() to not invert BRAM CLKs (#840)
+  - ModuleInst.connect() to leave physical Net alone for pass-thrus (#722)
+  - Unroute site routing when removing a cell (#729)
+  - PartialRouter's global router to not unpreserve sink nodes (#736)
+  - DesignTools.makePhysNetNamesConsistent() to use hier name (#735)
+  - DesignTools.makePhysNetNamesConsistent() to consider */<const{0,1}> (#734)
+  - Add DcpToInterchange class (#704)
+  - Add compile step (#733)
+  - Add EdifToLogicalNetlist to MainEntrypoint (#731)
+  - [PhysNetlistReader] Set Cell type for routethru cells (#727)
+  - Fix Javadoc warnings (#723)
+  - Fixes an issue with makeBlackBox trying to remove pins from renamed nets (#728)
+  - Multilevel macro expansion (#726)
+  - TestReplaceEDIFInDCP to copy DCP before replacing in-place (#725)
+  - DesignTools.createMissingSitePinInsts() to skip node-less site pins (#724)
+  - Add missing Versal DSP SiteTypeEnum (#842)
+  - [RWRoute] Further fix/cleanup around alternate source pins (#830)
+  - Adding out-of-context flag to RWRoute (#836)
+  - fix a bug in PipelineGeneratorWithRouting.createPipeline() (#837)
+  - Fix verb tense in RWRoute INFO msg (#835)
+  - Enable RWRoute to load Interchange designs from main() (#834)
+  - [VivadoTools] Check for Vivado on PATH first (#831)
+  - [EDIFNetlist] - Ensure Macro Expansion Deep Copies Children  (#828)
+  - Minor RWRoute and UltraScaleClockRouting fixes (#829)
+  - Properly add/remove dual-output pins (#825)
+  - [TestRouteNode] Update comment; swap east and west (#827)
+  - Add VivadoTools.reportRouteStatus() overload for specific net status (#823)
+  - Update link to Discussions forum (#824)
+  - [RWRoute] Only add alternative sources to SiteInst if used (#821)
+  - RouteNode.getPIPsBackToSource() to recognize reversed PIPs (#822)
+  - [PhysNetlistReader] Create FFRoutethruCell-s correctly (#817)
+  - Add test for Design.movePinsToNewNetDeleteOldNet() (#796)
+  - Test Cell.getAllCorrespondingSitePinNames() works for multi-outputs (#792)
+  - [PhysNetlistWriter] No IO site port output BELPins without SitePinInst (#820)
+  - [PhysNetlistWriter] Set PhysPip.setForward() even if not bidir (#819)
+  - [PhysNetlistWriter] Skip output BELPins without cells, and port cells (#818)
+  - Test that Design.createModuleInst() copies static sources (#839)
+  - Design.createModuleInst() to copy STATIC_SOURCE_ SiteInsts properly
+  - Store partname in netlist for new designs
+  - SiteInst.addPin() to trackChanges() when ?_O or ?MUX pin added
+  - Method parameter names preserved in API lib jar
+- API Additions:
+  - com.xilinx.rapidwright.design.Module "public Cell getCell(String cellName)"
+  - com.xilinx.rapidwright.design.Net "public boolean isVCCNet()"
+  - com.xilinx.rapidwright.design.Net "public boolean isGNDNet()"
+  - com.xilinx.rapidwright.design.Net "public boolean isUsedNet()"
+
+============= RapidWright 2023.1.3-beta released on 2023-09-13 ================
+Notes:
+  - Fix DesignTools.getConnectionPIPs() (#809) 
+  - [PhysNetlistWriter] RouteBranchNode.getDrivers() to return input BelPin (#800)
+  - Adds site pins to example code generation for nets. (#807)
+  - Update to fixed microblazeAndILA_3pblocks.dcp (#808)
+  - [LogNetlistWriter] Refactor writeStrings method to be public static (#804)
+  - [VivadoTools] ReportRouteStatusResult to parse more stats (#805) 
+  - EDIF improvements (#806)
+  - RWRoute improvements (#803)
+  - Adds a createBitstream() method to VivadoTools (#801)
+  - Small DesignTools improvements (#797)
+  - added static function that helps produce test nets (including PIPs) (#784)
+  - Add reference copy methods (#794)
+  - [RWRoute] Add alternate source pins and set source routed flags (#787)
+  - Adds support for RouteThru LUT equations and makes LUTEquationEvaluator public (#795)
+  - Fix TestDCPLoad to prevent issues with parallel testing (#793)
+  - [PhysNetlistWriter] Fix route tree construction for bidir PIPs (#791)
+  - VivadoTools.reportRouteStatus() to handle encrypted cells (#777)
+  - [PhysNetlistWriter] Insert site port BELPin before site pin (#790)
+  - fixed null pointer exception in getPhysicalNetFromPin() (#775)
+  - LUT cell companion helper methods (#764) 
+  - Check for error situation RAPIDWRIGHT_PATH set but not CLASSPATH (#772) 
+  - Set reversed flag on bi-directional PIPs used from end->start (#774)
+  - Fix RouterHelper.projectOutputPinToINTNode() for depop pins (#779)
+  - Make PartialRouter.getUnroutedPins() public (#778)
+  - FileTools.runCommand() - Adds ability to choose run directory (#769)
+  - [GlobalSignalRouting] Static router to not create site pin if exists (#768)
+  - RouteThru support for FFs in UltraScale architecture
+  - Fixes minor SitePinInst creation when reading a DCP
+  - Improvements to Net.rename() when tracking changes 
+  - Design.detachNetlist() to detach routethru cells
+  - Adds reference copy APIs and ability to keep copies of modified
+  SiteInsts and Nets
+  - Improvements to DCP reading compatibility for different flows
+    within Vivado
+- API Additions:
+  - com.xilinx.rapidwright.bitstream.BitLocation "public int hashCode()"
+  - com.xilinx.rapidwright.bitstream.BitLocation "public boolean equals(Object obj)"
+  - com.xilinx.rapidwright.bitstream.Bitstream "public static Bitstream readBitstream(Path fileName)"
+  - com.xilinx.rapidwright.bitstream.Block "public int getBit(BitLocation bit, Tile tile)"
+  - com.xilinx.rapidwright.bitstream.Block "public boolean updateBit(BitLocation bit, Tile tile, int value, Block golden)"
+  - com.xilinx.rapidwright.bitstream.ConfigRow "public ConfigRow(int configRowIdx)"
+  - com.xilinx.rapidwright.bitstream.FAR "public Block getConfigBlock(int slrCfgOrder)"
+  - com.xilinx.rapidwright.bitstream.Packet "public int hashCode()"
+  - com.xilinx.rapidwright.bitstream.Packet "public boolean equals(Object obj)"
+  - com.xilinx.rapidwright.design.Cell "public static final String FF_ROUTETHRU_TYPE"
+  - com.xilinx.rapidwright.design.Cell "public Cell getReferenceCopy()"
+  - com.xilinx.rapidwright.design.Cell "public boolean isFFRoutethruCell()"
+  - com.xilinx.rapidwright.design.Design "public boolean isCopyingOriginalNetsRouting()"
+  - com.xilinx.rapidwright.design.Design "public void setCopyingOriginalNetsRouting(boolean copyOrigNets)"
+  - com.xilinx.rapidwright.design.Design "public Map<String, List<PIP>> getOriginalNetRouting()"
+  - com.xilinx.rapidwright.design.Design "public boolean isCopyingOriginalSiteInsts()"
+  - com.xilinx.rapidwright.design.Design "public void setCopyingOriginalSiteInsts(boolean copyOrigSiteInsts)"
+  - com.xilinx.rapidwright.design.Design "public Map<String, SiteInst> getOriginalSiteInsts()"
+  - com.xilinx.rapidwright.design.Net "public List<PIP> getCopyOfPIPs()"
+  - com.xilinx.rapidwright.design.SiteInst "public void addPin(SitePinInst sitePinInst)"
+  - com.xilinx.rapidwright.design.SiteInst "public SiteInst getReferenceCopy()"
+
+============= RapidWright 2023.1.2-beta released on 2023-07-24 ================
+Notes:
+  - Shell creation improvements to enable lock_design and timing closure preservation (#760)
+  - Adds a MakeBlackBox command line tool (#747)
+  - Removes the VCC A6 pin on 5LUT usages when removing cells (#741)
+  - Add DesignTools.getAllRoutedSitePinsFromPhysicalPin() (#755) 
+  - Correctly update dual-output route flags when unrouting (#737) 
+  - [PhysNetlistReader] Set cell type of LOCKED cells (#767)
+  - Updates RAM32X1S property to correct default (#751)
+  - [Interchange] PhysNetlistReader to create STATIC_SOURCE SiteInsts (#766)
+  - RWRoute Fixes (#765)
+  - GlobalSignalRouting.routeStaticNet() to create output SPIs (#761)
+  - DesignTools.createCeSrRstPinsToVCC() to skip non-SLICE FFs (#744)
+  - [PartialRouter] Improve incremental global routing (#759)
+  - GlobalSignalRouting fixes for routing to non clock-pins (#757)
+  - DesignTools.makePhysNetNamesConsistent() to merge static nets too (#753) 
+  - [UltraScaleClockRouting] Reset RouteNode.parent (#752)
+  - Created parameterizable counter with an adder as a submodule (#713)
+  - [RWRoute] Fix PartialRouter for when clk node already unpreserved (#746) 
+  - [Interchange] Fix PhysicalNetlist's MultiCellPinMapping (#743)
+  - Unroute site routing when removing a cell (#729)
+  - PartialRouter's global router to not unpreserve sink nodes (#736)
+  - DesignTools.makePhysNetNamesConsistent() to use hier name (#735)
+  - DesignTools.makePhysNetNamesConsistent() to consider */<const{0,1}> (#734)
+  - Add DcpToInterchange class (#704)
+  - Add compile step (#733)
+  - Add EdifToLogicalNetlist to MainEntrypoint (#731)
+  - Fix Javadoc warnings (#723)
+  - Fixes an issue with makeBlackBox trying to remove pins from renamed nets (#728)
+  - [PhysNetlistReader] Set Cell type for routethru cells (#727)
+  - Multilevel macro expansion (#726)
+  - TestReplaceEDIFInDCP to copy DCP before replacing in-place (#725)
+  - DesignTools.createMissingSitePinInsts() to skip node-less site pins (#724)
+  - Fix to create alternate source pins on dual output nets.
+  - Fixes incorrect Versal SLR corner tile entries
+  - Cell.getProperty() returns null if no EDIFCellInst found
+  - Cell.getAllSitePinsFromLogicalPin() to not return any null pins
+  - Cell.getAllCorrespondingSitePinNames() to not NPE if no physical pin mapping
+  - Cell.getCorrespondingSitePinName() to consider F?MUX routethrus
+- API Additions:
+  - com.xilinx.rapidwright.device.PIP "public boolean isLogicalDriver()"
+  - com.xilinx.rapidwright.design.Cell "public String getCorrespondingSitePinName(String logicalPinName, String physPinName, List<String> siteWires)"
+
+============= RapidWright 2023.1.1-beta released on 2023-06-21 ================
+Notes:
+  - UltraScale Incremental Clock Router Improvements (#540)
+  - Adds VivadoTools, a Vivado wrapper/helper in RapidWright (#684)
+  - Fixes published Maven Central jar (#698)
+  - Enhancements to RWRoute (#691, #696)
+  - Interchange reader/writer improvements (#677)
+  - Fix for issue #709
+  - Improves handling of site routing and site pins when updating
+    physical netlist
+
+
+============= RapidWright 2023.1.0-beta released on 2023-05-31 ================
+Notes:
+  - Support for Vivado 2023.1 devices and reading 2023.1 DCPs
+  - Full adoption of Zstandard compression for all device and data
+  files - 11% faster device loads and 108% faster device cache loads with file size reductions of 32% and 52% respectively.
+  - Has a new 'rapidwright' run wrapper that avoids the need to set CLASSPATH, provides convenience to run any class file with a main() method, run the Jython interpreter and enables one-liner Jython commands.  Run `rapidwright` at the prompt for more details.
+  - Fix duplicate net source pins (won't set the alternate source if it is the same as the source)
+  - Change Net.connect() behavior to connect to existing SitePinInst if net is null
+  - DesignTools.createCeSrRstPinsToVCC() to detect gnd to invert (#664)
+  - EDIFNetlist.cellInstIOStandardFallback to collect set of IOSTANDARDs instead of throwing an error if there is a conflict (#671)
+  - [EDIF] More expanded macros to be deep copied from prim library (#672)
+  - Ignore TestCheckOpenFilesInstalled.test if outside of gradle (#674)
+  - [EDIF] EDIFNetlist.collapseMacroUnisims() to not clobber cell (#675)
+  - [EDIF] Explicit DEFAULT IOStandard on Cell to be overriden by Net (#686)
+- API Additions:
+  - (None)
+
+- API Deprecation Removals (--> Replacements) [Closed Source]:
+  - com.xilinx.rapidwright.device.Tile "public String getNameRoot() --> "public string getRootName()"
+  - com.xilinx.rapidwright.device.Device "public Tile[][] getTilesByNameRoot(String nameRoot)" --> "getTilesByRootName(String rootName)"
+
+============= RapidWright 2022.2.3-beta released on 2023-05-03 ================
+Notes:
+  - Adds preliminary support for Zstandard compression.  Uses it in device cache file generation. Next release will use it for all data files.
+  - Fixes an issue with missing Versal Premium families unisim data (#631)
+  - Adds an option to the Interchange device model writer to exclude routing info. to enable placement of the largest devices (#658)
+  - Fixes an issue in the PBlockGenerator parser (#633)
+  - Resolves an issue where collapsed macro ports' parent reference was not set properly (#654)
+  - EDIFNetlist.getIOStandard() to inherit IOStandard from EDIFNet (#646)
+  
+- API Additions:
+  - com.xilinx.rapidwright.design.Design "public static boolean readEdifAndXdefInParallel()"
+  - com.xilinx.rapidwright.design.Design "public static void setReadEdifAndXdefInParallel(boolean readEdifAndXdefInParallel)"
+
+
+============= RapidWright 2022.2.2-beta released on 2023-03-10 ================
+Notes:
+  - Includes new API to ensure all downloaded/generated dependant files are present in RapidWright install (#613)
+  - Change in Cell.hashCode() and Cell.equals() behavior such that it now distinguishes routethru cells (#624), see Issue #611
+  - Fixes an issue with isFF() (#622)
+  - Resolves issue with Cells and Nets that contain backslashes not being properly loaded (#612)
+  - Fix for parsing gzipped EDIF files in parallel (#619)
+  - Fix for EDIF export bussed names that collide with bitty names (#616)
+  
+- API Additions:
+  - com.xilinx.rapidwright.device.Device "public void ensureDeviceCacheFileIsGenerated()" 
+
+============= RapidWright 2022.2.1-beta released on 2023-01-19 ================
+Notes:
+  - Preserves hwdef information in DCP (#597)
+  - Adds APIs to access BELAttr information in design (#598)
+  - Many improvements to RWRoute to cleanup code and improves both quality and runtime performance
+  - Fixes a bug with 2022.2 DCPs where hierarchical names were getting mangled in RapidWright (#603)
+  - Adds support for reading gzipped EDIF files
+  - Fixes an issue with Design.updateDesignWithCheckpointPlaceAndRoute() on more recent version DCPs (#601)
+
+- API Additions:
+  - com.xilinx.rapidwright.design.Design "public Map<Site, SiteConfig> getBELAttrs()"
+  - com.xilinx.rapidwright.design.Design "public BELAttr addBELAttr(Net net, Site site, SiteTypeEnum type, BEL bel, String name, String value)"
+  - com.xilinx.rapidwright.device.Device "public BEL getBEL(SiteTypeEnum type, String belName)"
+  - com.xilinx.rapidwright.device.Device "public BEL[] getBELs(SiteTypeEnum type)"
+
+============= RapidWright 2022.2.0-beta released on 2022-11-16 ================
+Notes:
+  - Support for Vivado 2022.2 devices and DCPs
+  - ~5% memory usage improvement over 2022.1.4 when loading (large) DCPs
+  - Removes several deprecated APIs (See list below)
+  - Fixes the method "public synchronized boolean isIOStandardSupported(String ioStandard)" on Package.
+  - Corrects null node scenario as seen in #581
+  - Moving device root tile name cache into open source (#578)
+
+ - API Additions:
+   - com.xilinx.rapidwright.design.Cell "public Cell copyCell(String name, EDIFHierCellInst inst)"
+   - com.xilinx.rapidwright.design.Cell "public Cell copyCell(String name, EDIFHierCellInst inst, SiteInst i)"
+   - com.xilinx.rapidwright.design.Cell "public Map<String, EDIFPropertyValue> getProperties()"
+   - com.xilinx.rapidwright.device.Device "public Tile[][] getTilesByRootName(String rootName)"
+   - com.xilinx.rapidwright.device.Tile.java "public String getRootName()"
+ 
+ - API Deprecation Removals (--> Replacements) [Open Source]:
+   - com.xilinx.rapidwright.design.ModuleInst "public ArrayList<SiteInst> getInsts()" 
+     --> "public List<SiteInst> getSiteInsts()"
+   - com.xilinx.rapidwright.design.ModuleInst "public Tile getCorrespondingTile(Tile templateTile, Tile newAnchorTile, Device dev)"
+     --> "public Tile getCorrespondingTile(Tile templateTile, Tile newAnchorTile)"
+   - com.xilinx.rapidwright.edif.EDIFCellInst "public Map<String, EDIFPortInst> getPortInstMap()"
+     --> "public Collection<EDIFPortInst> getPortInsts()"
+   - com.xilinx.rapidwright.edif.EDIFCellInst "public void updateCellType(EDIFCell cellType)"
+     --> "public void setCellType(EDIFCell cellType)"
+   - com.xilinx.rapidwright.edif.EDIFNet "public Map<String, EDIFPortInst> getPortInstMap()"
+     --> "public Collection<EDIFPortInst> getPortInsts()"
+   - com.xilinx.rapidwright.edif.EDIFNet "public EDIFPortInst getPortInst(String fullName)"
+     --> "public EDIFPortInst getPortInst(EDIFCellInst inst, String portInstName)"
+   - com.xilinx.rapidwright.edif.EDIFNet "public EDIFPortInst removePortInst(String portInstName)"
+     --> "public EDIFPortInst removePortInst(EDIFCellInst inst, String portInstName)"
+     --> "public EDIFPortInst removePortInst(EDIFPortInst portInst)"
+   - com.xilinx.rapidwright.edif.EDIFNetlist "public static String getHierParentName(String hierReferenceName)"
+     --> com.xilinx.rapidwright.edif.EDIFHierCellInst.getParent().toString()
+     --> com.xilinx.rapidwright.edif.EDIFHierNet.getParent().toString()
+     --> com.xilinx.rapidwright.edif.EDIFHierPortInst.getParent().toString()
+   - com.xilinx.rapidwright.edif.EDIFNetlist "public static String getNextHierChildName(String ancestor, String descendent)"
+     --> com.xilinx.rapidwright.edif.EDIFHierCellInst.getParent().toString()
+   - com.xilinx.rapidwright.edif.EDIFNetlist "public HashMap<String,EDIFPort> generateEDIFPortMap()"
+     --> com.xilinx.rapidwright.edif.EDIFCell.getPortMap()  
+   - com.xilinx.rapidwright.edif.EDIFTools "public static EDIFNet connectLogicalNetAcrossHierarchy(String sinkParentInstName, String srcParentInstName, Map<String, EDIFNet> parentInstNameToLogNet, EDIFNetlist netlist)"
+     --> "public static void connectPortInstsThruHier(EDIFHierPortInst src, EDIFHierPortInst snk, String newName)"
+   - com.xilinx.rapidwright.edif.EDIFPort "public String getStemName()"
+     --> "public static String getRootBusName(String name, boolean includeOpenBracket)"
+   - com.xilinx.rapidwright.edif.EDIFPropertyObject "public EDIFPropertyValue addProperty(EDIFName key, EDIFPropertyValue value)"
+     --> "public EDIFPropertyValue addProperty(String key, EDIFPropertyValue value)"
+   - com.xilinx.rapidwright.edif.EDIFPropertyObject "public void addProperties(Map<EDIFName,EDIFPropertyValue> properties)"
+     --> "public EDIFPropertyValue addProperty(String key, EDIFPropertyValue value)"
+   - com.xilinx.rapidwright.edif.EDIFPropertyObject "public Map<EDIFName, EDIFPropertyValue> getProperties()"
+     --> "public Map<String, EDIFPropertyValue> getPropertiesMap()"
+   - com.xilinx.rapidwright.edif.EDIFPropertyObject "public void setProperties(Map<EDIFName, EDIFPropertyValue> properties)"
+     --> "public void setPropertiesMap(Map<String, EDIFPropertyValue> properties)"
+   - com.xilinx.rapidwright.edif.EDIFTools "public static EDIFCellInst getEDIFCellInst(EDIFNetlist netlist, String hierarchicalName)"
+     --> com.xilinx.rapidwright.edif.EDIFNetlist.getCellInstFromHierName()
+   - com.xilinx.rapidwright.edif.EDIFTools "public static String getHierarchicalRootFromPinName(String s)"
+     --> com.xilinx.rapidwright.edif.EDIFHierCellInst.getParent().toString()
+   - com.xilinx.rapidwright.edif.EDIFTools "public static void flattenNetlist(Design design)"
+     --> "public static Boolean uniqueifyNetlist(Design design)" 
+   - com.xilinx.rapidwright.util.FileTools "public static boolean checkIfRapidWrightResourceExists(String name)"
+     --> N/A
+   - com.xilinx.rapidwright.util.FileTools "public static boolean folderCheck(String name)"
+     --> java.io.File().exists()
+   - com.xilinx.rapidwright.util.MessageGenerator "public static void briefErrorAndExit(String msg)"
+     --> System.err.println(), return or throw new RuntimeException() (avoid System.exit())
+   - com.xilinx.rapidwright.util.MessageGenerator "public static void briefMessageAndExit(String msg)"
+     --> System.out.println(), return or throw new RuntimeException() (avoid System.exit())
+ - API Deprecation Removals (--> Replacements) [Closed Source]:
+   - com.xilinx.rapidwright.design.Cell "public Map<EDIFName, EDIFPropertyValue> getProperties()"
+     --> "public Map<String, EDIFPropertyValue> getProperties()"
+   - com.xilinx.rapidwright.design.Cell "public Cell(String name, EDIFCellInst edifCellInst)"
+     --> "public Cell(String name)"
+   - com.xilinx.rapidwright.design.Cell "public Cell(String name, BEL bel, EDIFCellInst edifCellInst)"
+     --> "public Cell(String name, BEL bel)" 
+   - com.xilinx.rapidwright.design.Cell "public Cell(String name, SiteInst siteInst, BEL bel, EDIFCellInst edifCellInst)"
+     --> "public Cell(String name, SiteInst siteInst, BEL bel)"
+   - com.xilinx.rapidwright.design.Cell "public Cell copyCell(String name, EDIFCellInst edifCellInst)"
+     --> "public Cell(String name)"
+   - com.xilinx.rapidwright.design.Cell "public Cell copyCell(String name, EDIFCellInst edifCellInst, SiteInst i)"
+     --> "public Cell(String name)"
+   - com.xilinx.rapidwright.design.Cell "public void setEDIFCellInst(EDIFCellInst edifCellInst)"
+     --> "public void setEDIFHierCellInst(EDIFHierCellInst inst)"
+   - com.xilinx.rapidwright.design.Cell "public void setProperties(Map<EDIFName, EDIFPropertyValue> properties)"
+     --> "public void setPropertiesMap(Map<String, EDIFPropertyValue> properties)"
+   - com.xilinx.rapidwright.design.Design "public Net createNet(EDIFNet net)"
+     --> "public Net createNet(EDIFHierNet net)"
+   - com.xilinx.rapidwright.design.Design "public Net createNet(String name, EDIFNet net)"
+     --> "public Net createNet(EDIFHierNet net)"
+   - com.xilinx.rapidwright.design.Design "public HashMap<String,EDIFCellInst> getNetlistInstMap()"   
+     --> com.xilinx.rapidwright.netlist.EDIFNetlist.generateCellInstMap();
+   - com.xilinx.rapidwright.design.Design "public HashMap<String, EDIFNet> getNetlistNetMap()"   
+     --> com.xilinx.rapidwright.netlist.EDIFNetlist.generateEDIFNetMap();
+   - com.xilinx.rapidwright.design.Module "public boolean isValidPlacement(Site proposedAnchorSite, Device dev, Design design)"
+     --> "public boolean isValidPlacement(Site proposedAnchorSite, Design design)"
+   - com.xilinx.rapidwright.design.Module "public Tile getCorrespondingTile(Tile templateTile, Tile newAnchorTile, Device dev)"
+     --> "public Tile getCorrespondingTile(Tile templateTile, Tile newAnchorTile)"
+   - com.xilinx.rapidwright.design.Net "public Net(String name, EDIFNet logicalNet)"
+     --> "public Net(String name)"
+   - com.xilinx.rapidwright.design.Net "public Net(EDIFNet logicalNet)"
+     --> "public Net(EDIFHierNet net)"
+   - com.xilinx.rapidwright.design.Net "public SitePinInst createPin(boolean isOutput, String pinName, SiteInst si)"
+     --> "public SitePinInst createPin(String pinName, SiteInst si)"
+   - com.xilinx.rapidwright.design.Net "public void setLogicalNet(EDIFNet logicalNet)"
+     --> "public void setLogicalHierNet(EDIFHierNet logicalHierNet)"
+   - com.xilinx.rapidwright.design.SiteInst "public Set<Net> getNetList()"
+     --> "public Set<Net> getConnectedNets()"
+   - com.xilinx.rapidwright.design.SiteInst "public Map<String,Net> getNetSiteWireMap()"
+     --> "public Map<String, Net> getSiteWireToNetMap()"  
+   - com.xilinx.rapidwright.device.Device "public String getDeviceName()"
+     --> "public String getName()"
+   - com.xilinx.rapidwright.device.Node "public Node(Tile tile, int wire)"
+     --> "public static Node getNode(Tile tile, int wire)"
+   - com.xilinx.rapidwright.device.Node "public Node(Wire w)"
+     --> "public static Node getNode(Wire wire)"   
+   - com.xilinx.rapidwright.device.Node "public Node(Tile tile, String wireName)"
+     --> "public static Node getNode(Tile tile, int wire)"
+   - com.xilinx.rapidwright.device.Node "public Node(String nodeName, Device dev)"
+     --> "public static Node getNode(String nodeName, Device dev)"
+   - com.xilinx.rapidwright.device.Node "public Node(RouteNode routeNode)"
+     --> "public static Node getNode(RouteNode routeNode)"
+   - com.xilinx.rapidwright.device.Package "public String getSiteType(String packagePinName)"
+     --> "public Site getSiteFromPackagePin(String packagePinName)"
+   - com.xilinx.rapidwright.device.PackagePin "public String getSiteType()"
+     --> "public Site getSite()"
+          
+============= RapidWright 2022.1.4-beta released on 2022-11-03 ================
+Notes: 
+ * Can now load EDIF netlist in parallel with placement and routing when reading a DCP
+ * Allows the Design object to detach the corresponding EDIFNetlist to save working memory
+ * Restores the original EDIFPort.getBusName() behavior
+ * Changes EDIFPortInstList duplicate behavior from prohibit to overwrite 
+ * Net.removePin() to unset alternate source
+ * Fix Net.removePin() for static nets under preserveOtherRoutes
+ * Option to track process peak memory usage
+ * Fix for #548, #572, #564
+ * Fixes intrasite routing to CARRY pins from LUT outputs on UltraScale/+
+ - API Additions:
+   - com.xilinx.rapidwright.design.Cell "public void setEDIFHierCellInst(EDIFHierCellInst inst)"
+   - com.xilinx.rapidwright.design.Design "public void detachNetlist()"
+   - com.xilinx.rapidwright.device.Node "public Collection<Node> getAllDownhillNodes(Collection<Node> nodes)"
+   - com.xilinx.rapidwright.device.Node "public Collection<Node> getAllUphillNodes(Collection<Node> nodes)"
+
+============= RapidWright 2022.1.3-beta released on 2022-09-19 ================
+Notes: 
+ * Adds support for partition pins, several new APIs added as seen below
+ * Fixes site routing for F8MUX inputs and routethrus on CARRY pins
+ * Fix for DCPs created with -binary_only option
+ * Fix for DCPs that don't end with '.dcp' extension
+ * Optimizes EDIF memory usage (see #463)
+ * Improved handling of dual-output nets
+ * Fixes BEL.canInvert()
+ * Preserves BEL attributes DB in Versal DCPs
+ - API Additions:
+   - com.xilinx.rapidwright.design.Cell "public void setPropertiesMap(Map<String, EDIFPropertyValue> properties)"
+   - com.xilinx.rapidwright.design.Cell "public List<String> getAllCorrespondingSitePinNames(String logicalPinName, boolean considerLutRoutethru)"
+   - com.xilinx.rapidwright.design.Design "public boolean addPartitionPin(PartitionPin pin)"
+   - com.xilinx.rapidwright.design.Design "public boolean removePartitionPin(PartitionPin pin)"
+   - com.xilinx.rapidwright.design.Design "public List<PartitionPin> getPartitionPins()"
+   - com.xilinx.rapidwright.design.Design "public PartitionPin createPartitionPin(EDIFHierPortInst pin, Node node)"
+   - com.xilinx.rapidwright.design.Design "public PartitionPin createPartitionPin(EDIFPort port, int index, Node node)"
+   - com.xilinx.rapidwright.design.Design "public PartitionPin createPartitionPin(EDIFPort port, Node node)"
+   - com.xilinx.rapidwright.design.Design "public void unrouteSites()"
+   - com.xilinx.rapidwright.design.Net "public static final String Z_NET = "GLOBAL_DUMMY_ROUTE""
+   - com.xilinx.rapidwright.design.PartitionPin "public Tile getTile()"
+   - com.xilinx.rapidwright.design.PartitionPin "public String getTileName()"
+   - com.xilinx.rapidwright.design.PartitionPin "public void setNode(Node node)"
+   - com.xilinx.rapidwright.design.PartitionPin "public Node getNode()"
+   - com.xilinx.rapidwright.design.PartitionPin "public int getWireIndex()"
+   - com.xilinx.rapidwright.design.PartitionPin "public String getWireName()"
+   - com.xilinx.rapidwright.design.PartitionPin "public void setIsFixed(boolean isFixed)"
+   - com.xilinx.rapidwright.design.PartitionPin "public void setIsWireFixed(boolean isWireFixed)"
+   - com.xilinx.rapidwright.design.PartitionPin "public boolean isFixed()"
+   - com.xilinx.rapidwright.design.PartitionPin "public boolean isWireFixed()"
+   - com.xilinx.rapidwright.design.PartitionPin "public String getInstanceName()"
+   - com.xilinx.rapidwright.design.PartitionPin "public boolean isPort()"
+   - com.xilinx.rapidwright.design.PartitionPin "public String getTerminalName()"
+   - com.xilinx.rapidwright.design.PartitionPin "public String getLibCellName()"
+   - com.xilinx.rapidwright.design.PartitionPin "public String toString()"
+   - com.xilinx.rapidwright.design.SiteInst "public boolean removePin(SitePinInst sitePinInst)"
+
+
+
+
+============= RapidWright 2022.1.2-beta released on 2022-07-27 ================
+Notes: 
+ * Includes some memory usage improvements of 8-14% for a parsed EDIF netlist (#428)
+ * Placement memory reduction by 19% or ~4.7% for a design
+ * For 2022.1 DCPs, enables placement & routing information to be read in parallel, or load DCPs up 
+   to 44% faster. 
+ * Fix to DeviceBrowser to browse devices prior to downloading their database file (#427)
+ * Fixes placed (but not routed) design import/export for Interchange-based files (#467)
+ * Design.createModuleInst() now copies netlist cells rather than migrate them
+ * Properly unroutes routethru in SiteInst.unrouteIntraSiteNet()
+ * Net and Cell classes now keep lazy reference to hierarchical netlist object
+ * Net.unroutePin() now uses code in DesignTools.unroutePins()
+ * Fix to unique-ify netlist (or previously flatten netlist) (#430)  
+ * Bumps Gradle Wrapper version from 7.1 to 7.4.2 to enable Java 18 support (#453)
+ * Replacing EDIF in DCP now also removes existing binary netlist equivalent (.xn)   
+ * Includes PRs: #409, #417, #424, #427, #428, #429, #430, #431, #432, #437, #442, #443, #445, #446,
+                 #449, #450, #451, #453, #455, #459, #461, #462, #465, #469, #470, #471, #472, #476, 
+                 #477
+ * Fixes Issues: #136, #419, #441, #444, #454, #464 
+ - API Additions:
+   - com.xilinx.rapidwright.design.Cell "public EDIFHierCellInst getEDIFHierCellInst()"
+   - com.xilinx.rapidwright.design.Design "public Net createNet(EDIFHierNet net)"
+   - com.xilinx.rapidwright.design.Design "public static boolean replaceEDIFinDCP(String inDcpFileName, String edfFileName, String outDcpFileName)"
+   - com.xilinx.rapidwright.design.Net "public Design getDesign()"
+   - com.xilinx.rapidwright.design.Net "public EDIFHierNet getLogicalHierNet()"
+   - com.xilinx.rapidwright.design.Net "public Net(String name, EDIFHierNet logicalHierNet)"
+   - com.xilinx.rapidwright.design.Net "public void setDesign(Design design)"
+   - com.xilinx.rapidwright.design.Net "public void setLogicalHierNet(EDIFHierNet logicalHierNet)"
+   - com.xilinx.rapidwright.design.SiteInst "public BELPin getBELPin(String belName, String pinName)"
+   - com.xilinx.rapidwright.device.BELPin "public BELPin getConnectedInputPinOnBEL(BEL bel)"
+
+
+============= RapidWright 2022.1.1-beta released on 2022-05-13 ================
+Notes: 
+ * Fixes crash issue while reading DCPs created by Vivado 2022.1
+ * Adds more granularity to runtime reporting in reading 2022.1 DCPs
+
+============= RapidWright 2022.1.0-beta released on 2022-05-05 ================
+Notes: 
+ * Support for Vivado 2022.1 devices and read of DCPs
+ * Enables parallel EDIF parsing by default (except when EDIF is readable inside DCP).  Depending on
+   file size and number of available threads, speedup can achieve 2.5-10X faster runtimes. 
+ * Adds facilities to track logical netlist and physical netlist changes to keep a record of 
+   incremental changes in a design.
+ * Preserves AI Engine and NOC data when writing DCPs from RapidWright
+ * Disallows turning multiple sitePIPs on on the same RBEL at the same time
+ * Enables LUT routethru routing on intrasite nets
+ * Net.addPin() to add output pin as an alternate source if a source on the net already exists
+ * The anchor object on the Module class has been changed from a SiteInst to a Site
+ * Allows better recovery of augmented tile cache generation failure 
+ * Includes PRs: #378, #379, #380, #381, #382, #383, #385, #387, #396, #395, #397, #400, #401, #402, 
+                 #405, #406, #404, #407
+ * Fixes Issues: #392
+ - API Additions:
+   - com.xilinx.rapidwright.design.Design public "void clearTrackedChanges()"
+   - com.xilinx.rapidwright.design.Design public "void setTrackingChanges(boolean trackChanges)"
+   - com.xilinx.rapidwright.design.Design public "boolean isTrackingSiteInstChanges()"
+   - com.xilinx.rapidwright.design.Design public "void setTrackSiteInstChanges(boolean trackSiteInstChanges)"
+   - com.xilinx.rapidwright.design.Design public "boolean isTrackingNetChanges()"
+   - com.xilinx.rapidwright.design.Design public "void setTrackNetChanges(boolean trackNetChanges)"
+   - com.xilinx.rapidwright.design.Design public "Set<SiteInst> getModifiedSiteInsts()"
+   - com.xilinx.rapidwright.design.Design public "Set<Net> getModifiedNets()"
+   - com.xilinx.rapidwright.design.Design public "boolean addModifiedNet(Net net)"
+   - com.xilinx.rapidwright.design.Design public "boolean addModifiedSiteInst(SiteInst siteInst)"
+   - com.xilinx.rapidwright.device.Device public "Tile getArbitraryTileOfType(TileTypeEnum type)"
+
+
+============= RapidWright 2021.2.2-beta released on 2022-03-17 ================
+Notes: 
+ * Parallelism enabled by default (#365), can be turned off with:
+   - ParallelismTools.setParallel(false) or 
+   - Set the environment variable to RW_PARALLEL=0.
+ * Contains bitstream relocation tools for specific UltraScale+ scenarios (#334, #357, #373)   
+ * EDIF netlist memory optimization - netlist uses ~70% less memory when loaded (#339)
+ * Binary EDIF format - loads ~5x faster (writes ~2x slower) than plain-text EDIF.  After EDIF reads
+   this format can be cached with setting the environment variable RW_ENABLE_EDIF_BINARY_CACHING (#359)
+ * 'make update_jars' now pulls the jars from Maven Central instead of the rapidwright_jars.zip (#366) 
+ * Caches to a file the uncommon node map generated at runtime for a device (see #362)  
+ * Includes PRs: #321, #343, #339, #352, #353, #348, #346, #362, #359, #361, #344, #357, #334, #365,
+                 #350, #366, #341, #370, #372, #373, #374, #375, #376, #377 
+ * Fixes Issues: #117, #342, #349
+ - API Additions:
+   - com.xilinx.rapidwright.bitstream.Bitstream "public static void checkIfDeviceSupported(String partName)"
+   - com.xilinx.rapidwright.bitstream.BlockType "public static final BlockType[] values"
+   - com.xilinx.rapidwright.bitstream.ConfigArray "public static final int FRAME_OVERHEAD_COUNT_PER_ROW"
+   - com.xilinx.rapidwright.bitstream.OpCode "public static final OpCode[] values"
+   - com.xilinx.rapidwright.bitstream.PacketType "public static final PacketType[] values"
+   - com.xilinx.rapidwright.bitstream.RegisterType "public static final RegisterType[] values"
+   - com.xilinx.rapidwright.design.Module "public Module(Design design, String metadataFileName, boolean unrouteStaticNets)"
+   - com.xilinx.rapidwright.design.Module "public Module(Design design, boolean unrouteStaticNets)"
+   - com.xilinx.rapidwright.design.Module "public Site getCorrespondingSite(SiteInst inst, Site anchorSite)"
+   - com.xilinx.rapidwright.design.SiteInst "public Set<Net> getConnectedNets()"
+   - com.xilinx.rapidwright.device.Device "public static final String DEVICE_CACHE_FILE_VERSION"
+ 
+ 
+ 
+ 
+============= RapidWright 2021.2.1-beta released on 2022-02-03 ================
+Notes: 
+ * 3-4X faster DCP write times using a new parallel, multi-threaded approach (See #337), Enable with:
+   - ParallelismTools.setParallel(true) or 
+   - Add the environment variable RW_PARALLEL to the environment.
+ * Multiple DCP read operations can now be initiated in parallel without errors
+ * Fixes a number of issues related to SitePinInst creation on DCP load (see #317, #318)
+ * Adds a new MergeDesign capability, allows users to merge two or more existing designs into a
+   single implementation (See #331)
+ * All RapidWright dependencies and itself are published on Maven Central.  Removes the need to 
+   manually download rapidwright_jars.zip, instead users can simply run './gradlew update_jars'  
+ * Includes PRs: #287, #291, #289, #297, #290 #300, #296, #294, #304, #305, #313, #319, #324, #328,
+                 #320, #332, #330, #336, #331, #333, #322, #318, #317
+ * Fixes Issues: #326, #298, #299, #312, #315, #326
+ - API Additions:
+   - com.xilinx.rapidwright.design.Design "public void setName(String name)"
+   - com.xilinx.rapidwright.device.Site "public ClockRegion getClockRegion()"
+ 
+ 
+============= RapidWright 2021.2.0-beta released on 2021-11-09 ================
+Notes: 
+ * Updates support for latest Vivado devices in 2021.2
+ * Adds flag information to BEL and BELPin objects (see API additions)
+ * Moves the RapidWrightDCP submodule to test/RapidWrightDCP
+ * Several Block Placer runtime and code improvements
+ * Adds a method to resolve site routing when combining designs built
+   from in-context builds into another design
+ * Adds Python support for CI
+ * Feature to catch System.exit() calls for Python REPL loops, not
+   turned on by default in Java 17 and later
+ * Adds DRC framework
+ * Fixes Issues: #195, #277, #283, #259
+ - API Additions:
+    - com.xilinx.rapidwright.device.BEL "public boolean isLUT()"
+    - com.xilinx.rapidwright.device.BEL "public boolean isFF()"
+    - com.xilinx.rapidwright.device.BEL "public boolean isCarry()"
+    - com.xilinx.rapidwright.device.BEL "public boolean isSRIMR()"
+    - com.xilinx.rapidwright.device.BEL "public boolean isSliceFFClkMod()"
+    - com.xilinx.rapidwright.device.BELPin "public boolean isPartOfBus()"
+    - com.xilinx.rapidwright.device.BELPin "public boolean isData()"
+    - com.xilinx.rapidwright.device.BELPin "public boolean isClock()"
+    - com.xilinx.rapidwright.device.BELPin "public boolean isEnable()"
+    - com.xilinx.rapidwright.device.BELPin "public boolean isSet()"
+    - com.xilinx.rapidwright.device.BELPin "public boolean isReset()"
+
+
+============= RapidWright 2021.1.2-beta released on 2021-10-23 ================
+Notes: 
+ * Includes RWRoute - a full design timing driven router
+ * Moves online discussions and forum to GitHub Discussions
+   https://github.com/Xilinx/RapidWright/discussions (retiring Google Groups).
+ * Turns off Kryo Unsafe usage for Java 15 and above
+ * Better auto generation handling of readable EDIF files.  Creates an
+   MD5 checksum for DCPs and unique directory for EDIFs to avoid stale EDIFs.
+ * Includes Python packaging files and adds the option to use local
+   development RapidWright build when RAPIDWRIGHT_PATH is set (see #267)
+ * Adds RapidWright relocation tools - the ability to relocate
+   implementations without using Modules/ModuleInsts.
+ * Includes a performance evaluation tool to leverage Vivado to
+   identify true fmax of a design.
+ * Improves PartNameTools to return integer values of available
+   resources of a part.
+ * Fixes Issues #259, #246, #73, #251, #190
+ - API Additions:
+    - com.xilinx.rapidwright.design.Design "public static boolean replaceEDIFinDCP(String dcpFileName, String edfFileName)"
+
+
+============= RapidWright 2021.1.1-beta released on 2021-09-28 ================
+Notes: 
+ * Fixes ModuleInst anchor read issue when loading a RapidWright-generated DCP
+ * Adds correct macro expansion for BUFG and CFGLUT5 primitives 
+ * For executable jars, the RapidWright default directory has been changed to ~/.local/share/RapidWright on Linux and %APPDATA%\RapidWright on Windows.
+ * Improvements in Utils and TileColumnPattern for URAM
+ * Adds dotty graph dump facilities for some logical and physical netlist classes
+ * Fixed an issue in PolynomialGenerator trying to create duplicate pins
+ * Various fixes around closing files and streams 
+ * Includes fixes for #228, #238, #244
+ * Changes return type of Module "public RelocatableTileRectangle getBoundingBox()" from TileRectangle
+ - API Additions:
+    - com.xilinx.rapidwright.bitstream.Block "public boolean copyFrameData(Block block)"
+    - com.xilinx.rapidwright.bitstream.Frame "public boolean copyWords(Frame frame)"
+    - com.xilinx.rapidwright.design.Cell "public Cell createCell(EDIFHierCellInst inst, BEL bel)"
+    - com.xilinx.rapidwright.design.Net "public void unroutePin(SitePinInst p)"
+
+
+============= RapidWright 2021.1.0-beta released on 2021-09-14 ================
+Notes: 
+ * Updates device models to the public set released in Vivado 2021.1
+ * Provides a cloud data file download-on-demand model.  No longer need to
+   download large rapidwright_data.zip with each release.  Speeds up
+   install and enables easier packaging/distribution of RapidWright.
+ * Adds support to automatically invoke Vivado to create a missing
+   EDIF file when loading a DCP (if a compatible Vivado is on user's PATH).
+ * Moves timing model files into git repo (out of data directory)
+ * Includes fixes for #180, #217
+ - API Additions:
+    - com.xilinx.rapidwright.design.Design "public static void setAutoGenerateReadableEdif(boolean autoGenerateReadableEdif)"
+    - com.xilinx.rapidwright.design.Design "public static boolean isAutoGenerateReadableEdif()"
+
+
+============= RapidWright 2020.2.7-beta released on 2021-07-26 ================
+Notes: 
+ * Several fixes for RapidWright API Lib:
+   - Resolves left over antennas from mishandled bi-directional PIPs
+   - Resolves issue in module instance creation due to AltPinmapping
+     cell names not being updated.
+   - Fixes range issue with BUFCE_ROW instance in Net.setBufferDelay()
+   - Fixes when anchor is null when writing out metadata for module
+     instance in DCP.
+   - Fixes issue when reloading a DCP with encrypted cells back into
+     RapidWright and EDN file paths not being propagated.
+   - Patch for dual output net situation where incorrect routing flags
+     caused Vivado to crash.
+ * Includes EDIFHier updates to reduce memory and improve runtime.
+   Avoids use of a String for hierarchical representation and instead
+   uses an array of EDIFCellInst
+ * Includes fixes for #193, #194 and partial for #206
+ * Includes JUnit tests
+
+============= RapidWright 2020.2.6-beta released on 2021-06-23 ================
+Notes: 
+ * Updates Cap'n Proto Java Runtime from 0.1.4 to 0.1.7
+ * Updates Gradle wrapper to point to 7.1 (#189)
+ * Updates the singleton Device map to have soft references.  Allows
+   unused device objects to be garbage collected without having to call Device.releaseDeviceReferences().
+ * Includes a fix and some performance enhancements around module relocation.
+ * Interchange node discovery optimization (#184)
+ * Fixes tile caching issue in GUI (#185) and other device browser improvements (#187)
+ * Workaround for Java 16 and Kryo library (#191 - issue #190)
+ * Includes fixes for #183, #186
+ - API Additions:
+    - com.xilinx.rapidwright.device.Device "public Tile getTile(String nameRoot, int xCoordinate, int yCoordinate)"
+    - com.xilinx.rapidwright.device.Device "public Tile[][] getTilesByNameRoot(String nameRoot)"
+    - com.xilinx.rapidwright.device.Module "public static Tile getCorrespondingTile(Tile templateTile, Tile newAnchorTile, Tile originalAnchor, Tile[][] tiles)"
+    - com.xilinx.rapidwright.device.Tile "public String getNameRoot()"
+ - API Deprecations:
+    - com.xilinx.rapidwright.device.Device "public static void releaseDeviceReferences()"
+    - com.xilinx.rapidwright.device.Tile "public String getTileNamePrefix()"
+
+============= RapidWright 2020.2.5-beta released on 2021-05-18 ================
+Notes: 
+ * License updates:
+    - Adds a redistribution clause for the RapidWright API library jar
+    - Adds entries for the Gradle Wrapper, JUnit 5 and JetBrains Java Annotations
+ * Now includes the Gradle Wrapper
+ * Includes fixes for #178 (parts), #179, #181, #182
+ - API Additions:
+   - com.xilinx.rapidwright.design.Module "public boolean isValidPlacement(Site proposedAnchorSite, Design design)"
+   - com.xilinx.rapidwright.design.Module "public Tile getCorrespondingTile(Tile templateTile, Tile newAnchorTile)"
+   - com.xilinx.rapidwright.design.Net "public SitePinInst createPin(String pinName, SiteInst si)"
+   - com.xilinx.rapidwright.design.SiteInst "public SitePIP[] getSitePIPs()"
+ - API Deprecations:
+   - com.xilinx.rapidwright.design.Module "public boolean isValidPlacement(Site proposedAnchorSite, Device dev, Design design)"
+   - com.xilinx.rapidwright.design.Module "public Tile getCorrespondingTile(Tile templateTile, Tile newAnchorTile, Device dev)"
+   - com.xilinx.rapidwright.design.Net "public SitePinInst createPin(boolean isOutput, String pinName, SiteInst si)"
+
+============= RapidWright 2020.2.4-beta released on 2021-04-28 ================
+Notes:
+ * Adds IOBank and IOStandard data to Package objects in device model
+   to match Vivado Tcl capabilities.
+ * Allows Ports to have multiple pins (see #156 for details)
+ * Fix for Issues #161, #159, #61
+ * Minor DCP format changes for improved Versal support
+ * Gradle improvements (see #165 for details) that adds three tasks:
+   1) 'run' - a top level application to run a sub application in RapidWright directly
+   2) 'installDist' - Creates a distribution of all RapidWright dependant code with convenience startup scripts
+   3) 'distZip'/'distTar' - Creates a zipped/tar'd distribution
+ * Allow ports to have multiple pins
+ * A few other minor changes, please see commit log for details
+ - API Additions:
+    - com.xilinx.rapidwright.design.Design "public EDIFCellInst createOrFindEDIFCellInst(String name, EDIFCell cell)"
+    - com.xilinx.rapidwright.device.Package "public Map<String,IOBank> getIOBanksMap()"
+    - com.xilinx.rapidwright.device.Package "public IOBank getIOBank(String name)"
+    - com.xilinx.rapidwright.device.Package "public Collection<IOBank> getIOBanks()"
+    - com.xilinx.rapidwright.device.Package "public Set<IOStandard> getSupportedIOStandards()"
+    - com.xilinx.rapidwright.device.Package "public boolean isIOStandardSupported(String ioStandard)"
+    - com.xilinx.rapidwright.device.Package "public PackagePin getPackagePin(String name)" 
+    - com.xilinx.rapidwright.device.PackagePin "public IOBank getIOBank()"
+    - com.xilinx.rapidwright.device.IOBank "public int getId()"
+    - com.xilinx.rapidwright.device.IOBank "public String getName()"
+    - com.xilinx.rapidwright.device.IOBank "public IOBankType getBankType()"
+    - com.xilinx.rapidwright.device.IOBank "public Map<String,PackagePin> getPackagePinsMap()"
+    - com.xilinx.rapidwright.device.IOBank "public Collection<PackagePin> getPackagePins()"
+    - com.xilinx.rapidwright.device.IOBank "public Set<IOStandard> getSupportedIOStandards()"
+    - com.xilinx.rapidwright.device.IOBank "public PackagePin getPackagePin(String name)"
+    - com.xilinx.rapidwright.device.IOBank "public boolean isIOStandardSupported(IOStandard ioStandard)"
+    - com.xilinx.rapidwright.device.IOBank "public int hashCode()"
+    - com.xilinx.rapidwright.device.IOBank "public boolean equals(Object obj)"
+    - com.xilinx.rapidwright.device.IOBank "public String toString()"
+
+
+============= RapidWright 2020.2.3-beta released on 2021-03-30 ================
+Notes:
+ * Minor release that updates pin mappings when placing cells
+ * A few other minor changes, please see  commit log for details
+
+============= RapidWright 2020.2.2-beta released on 2021-03-10 ================
+Notes:
+ * First release to include the interchange project (see https://github.com/SymbiFlow/fpga-interchange-schema)
+ * Adds a new experimental DesignTools.copyImplementation() API for preserving partial implementation
+   results from a design on a per-module basis.
+ * Resolves Issue #127 - Duplicate PIPs from Tile.getPIPs()
+ * Fixes an issue related to not traversing routethrus when searching for site pins
+ * Fixes an issue in UltraScale clock routing getting stuck in a loop when routing to LCBs.
+ * Fix for missing portInst on FF routethrus
+ * Fixes missing BRAM site pins with multiple mappings
+ - API Additions:
+    - com.xilinx.rapidwright.design.Cell "public List<SitePinInst> getAllSitePinsFromPortInst(EDIFPortInst p, List<String> siteWires)"
+    - com.xilinx.rapidwright.design.Cell "public List<SitePinInst> getAllSitePinsFromLogicalPin(String logicalPinName, List<String> siteWires)"
+    - com.xilinx.rapidwright.design.Cell "public List<String> getAllCorrespondingSitePinNames(String logicalPinName)"
+    - com.xilinx.rapidwright.device.BEL "public boolean isStaticSource()"
+    - com.xilinx.rapidwright.device.BELPin "public String getBELName()"
+    - com.xilinx.rapidwright.device.BELPin "public boolean isGndSource()"
+    - com.xilinx.rapidwright.device.BELPin "public boolean isVccSource()"
+    - com.xilinx.rapidwright.device.BELPin "public boolean isStaticSource()"
+
+
+============= RapidWright 2020.2.1-beta released on 2021-01-15 ================
+Notes:
+ * Adds a set of bitstream manipulation APIs
+ * Adds part name normalization (see pull request #120)
+ * Bug fix for migrateCellAndSubCells() (see pull request #116)
+ * Fixes an NPE on getSitePinFromLogicalPin()
+ * Fixes support for BUFCE_ROW on Net.{get,set}BufferDelay()
+ - API Additions:
+    - com.xilinx.rapidwright.bitstream.{BitLocation, Bitstream, BitstreamHeader, Block, 
+                                        BlockSubType, BlockType, CMDCode, ConfigArray, ConfigRow, 
+                                        FAR, Frame, IDCode, OpCode, Packet, PacketType, 
+                                        RegisterType} # Please see Javadocs for full details.
+
+============= RapidWright 2020.2.0-beta released on 2020-12-22 ================
+Notes:
+ * Adds initial support for Versal devices (Vivado 2020.2 compatibility)
+ * Augments PackagePin metadata to more closely provide available properties found in Vivado.
+ * To support interchange: DesignTools.getInvertiblePinMap() which provides a map for a unisim to 
+   denote which pins are invertible by which parameter names
+ * The Part class has been augmented with a set of new methods that contain basic resources
+    for a particular part that are reported in Vivado with the 'report_property' command, 
+    these methods include: getAvailableIobs(), getBlockRams(), getDsp(), getFlipflops(), 
+    getGbTransceivers(), getLutElements(), p.getMmcm() and p.getUltraRams()   
+ - API Additions:
+   - com.xilinx.rapidwright.design.Net "public boolean setBufferDelay(Site site, int value)" 
+   - com.xilinx.rapidwright.design.Net "public boolean getBufferDelay(Site site)"
+   - com.xilinx.rapidwright.device.BEL "public BELPin getInvertingPin()" 
+   - com.xilinx.rapidwright.device.BEL "public BELPin getNonInvertingPin()"
+   - com.xilinx.rapidwright.device.PackagePin "public boolean isGeneralPurpose()"
+   - com.xilinx.rapidwright.device.PackagePin "public boolean isGlobalClk()"   
+   - com.xilinx.rapidwright.device.PackagePin "public boolean isLowCap()"
+   - com.xilinx.rapidwright.device.PackagePin "public boolean isVrn()"
+   - com.xilinx.rapidwright.device.PackagePin "public boolean isVrp()"   
+   - com.xilinx.rapidwright.device.PackagePin "public boolean isVref()"
+   - com.xilinx.rapidwright.device.Site "public boolean isGlobalClkPad()"
+   - com.xilinx.rapidwright.device.Site "public boolean isGlobalClkBuffer()"
+   - com.xilinx.rapidwright.device.Site "public boolean isRegionalClkPad()"
+   - com.xilinx.rapidwright.device.Site "public boolean isRegionalClkBuffer()"
+ - API Deprecations:
+   - com.xilinx.rapidwright.device.Package "public String getSiteType(String packagePinName)"
+   - com.xilinx.rapidwright.device.PackagePin "public String getSiteType()"
+ - API Removals (deprecated):
+
+============= RapidWright 2020.1.7-beta released on 2020-12-09 ================
+Notes:
+ * Fixes Issue #110 - Bad index because of integer overflow in VU19P.
+ * Fixes other issues related to logical -> physical mappings
+ * Fixes other issue related to Issue #63 in Wire.getStartWire()
+ * Updates EDIFTools.connectLogicalNetAcrossHierarchy() to update
+   parent net map.
+- API Additions:
+  - com.xilinx.rapidwright.design.Cell "public BELPin getBELPin(EDIFHierPortInst p)"
+  - com.xilinx.rapidwright.design.Cell "public BELPin getBELPin(EDIFPortInst p)"
+
+============= RapidWright 2020.1.6-beta released on 2020-12-04 ================
+Notes:
+ * Fixes Issue #104 - NPE for Node.isTied() issue.  
+ * Fixes Issue #105 (and Issue #63) - NPE and missing Nodes for Wire.getNode()
+ * As part of the fix for #105/#63, a Node cache is constructed behind
+   the API for the first call to an uncommon wire object.
+ * Deprecates all Node constructors and replaces with a Node.getNode()
+   equivalent also adds a sentinel "Invalid" Node for bad nodes on construction.
+ - API Additions:
+   - com.xilinx.rapidwright.device.BEL "public boolean isGndSource()"
+   - com.xilinx.rapidwright.device.BEL "public boolean isVccSource()"
+   - com.xilinx.rapidwright.device.BEL "public boolean canInvert()"
+   - com.xilinx.rapidwright.device.Node "public Node getNode(RouteNode routeNode)"
+   - com.xilinx.rapidwright.device.Node "public Node getNode(Tile tile, int wire)"
+   - com.xilinx.rapidwright.device.Node "public Node getNode(Wire wire)"
+   - com.xilinx.rapidwright.device.Node "public Node getNode(Tile tile, String wireName)"
+   - com.xilinx.rapidwright.device.Node "public Node getNode(String nodeName, Device dev)"
+   - com.xilinx.rapidwright.device.Node "public boolean isInvalidNode()"
+   - com.xilinx.rapidwright.device.Node "public IntentCode getIntentCode()"
+   - com.xilinx.rapidwright.device.Node "public IntentCode hasIntentCode(IntentCode intentCode)"
+ - API Modifications:
+   - com.xilinx.rapidwright.design.Cell "public Map<String,String> getPinMappingsL2P()"
+     --> Changed return type: "public Map<String,Set<String>> getPinMappingsL2P()"
+   - com.xilinx.rapidwright.design.Cell "public List<String> getAllPhysicalPinMappings(String logicalPin)"
+     --> Changed return type: "public Set<String> getAllPhysicalPinMappings(String logicalPin)"
+ - API Deprecations:
+   - com.xilinx.rapidwright.device.Node "public Node(RouteNode routeNode)"
+   - com.xilinx.rapidwright.device.Node "public Node(Tile tile,int wire)"
+   - com.xilinx.rapidwright.device.Node "public Node(Wire wire)"
+   - com.xilinx.rapidwright.device.Node "public Node(Tile tile, String wireName)"
+   - com.xilinx.rapidwright.device.Node "public Node(String nodeName, Device dev)"
+
+
+============= RapidWright 2020.1.5-beta released on 2020-11-13 ================
+Notes:
+ * Fixes a bug with incorrect SRL16* pin mappings on Series 7 and
+   STARTUPE3 pins on Zynq UltraScale+
+ * Checks for null parameters on Design.placeCell() - See Issue #91
+ * Removes incorrect board reference from DCPs created in RapidWright
+ * Fixes an issue with Cell -> BEL pin mappings where parameters don't
+   have entries
+ * Switches to GitHub Actions from Travis CI for automatic builds
+ * Changes default behavior for Kryo so that it no longer requires
+   class registering
+ - API Additions:
+   - com.xilinx.rapidwright.design.Design "public static EDIFLibrary getPrimitivesLibrary(String deviceName)"
+
+============= RapidWright 2020.1.4-beta released on 2020-11-02 ================
+Notes:
+ * Adds 2020.1 update 1 Vivado devices (XCVU19P, XCZU46DR, XCZU47DR,
+   XCZU48DR, XCZU49DR; Alveo devices: U55N, U55C)
+ * Adds a netlist flattening helper method ()
+ * Adds preliminary support for reproducing intermediate clock routing
+   state through the use of partial PIPs - not necessarily modifiable
+   though.  This is intermediate routing information added to clock nets
+   after during place_design that informs clock routing during
+   route_design.  Previously this was causing some ERRORs when writing
+   out placed DCPs.
+   * Some PIPs in these intermediate clock nets can have PIPs with no
+     end wire.  This can be checked with PIP.isEndWireNull().  Or
+     compare the end wire index with PIP.NULL_END_WIRE_IDX (0x0000FFFF).
+ * Various netlist helper methods (see commit log for details).
+ - API Additions:
+   - com.xilinx.rapidwright.design.Net "public boolean hasGapRouting()"
+   - com.xilinx.rapidwright.design.Net "public void setHasGapRouting(boolean hasGapRouting)"
+   - com.xilinx.rapidwright.design.SitePinInst public Integer getSiteWireIndex()
+   - com.xilinx.rapidwright.design.SitePinInst public Integer getSiteWireName()
+   - com.xilinx.rapidwright.design.SitePinInst public Integer getSiteWireBELPins()
+   - com.xilinx.rapidwright.device.PIP "public boolean isEndWireNull()"
+
+============= RapidWright 2020.1.3-beta released on 2020-10-12 ================
+Notes:
+ * Re-adds missing macro primitive definitions that were absent in previous releases
+ * Adds missing macro/translated primitive definitions IOBUFDS and OBUFTDS_DUAL_BUF
+ * Adds some basic helper methods to handle route-thrus
+ * Adds APIs to provide default property values for primitive cells (often unisims)
+ * Minor update with API additions
+ - API Additions:
+   - com.xilinx.rapidwright.design.SiteInst "public void unrouteSite()"
+   - com.xilinx.rapidwright.design.Design "public static EDIFLibrary getPrimitivesLibrary()"
+   - com.xilinx.rapidwright.design.Design "public static VivadoProp getDefaultProperty(Series series, String cellTypeName, String propName)"
+   - com.xilinx.rapidwright.design.Design "public static Map<String, VivadoProp> getDefaultCellProperties(Series series, String cellTypeName)"
+
+============= RapidWright 2020.1.2-beta released on 2020-08-13 ================
+Notes:
+ * Minor update with API additions
+ - API Additions:
+   - com.xilinx.rapidwright.design.Cell "public AltPinMapping getAltPinMapping(String physicalPin)"
+   - com.xilinx.rapidwright.design.Cell "public void addAltPinMapping(String physicalPin, AltPinMapping logicalPin)"
+   - com.xilinx.rapidwright.design.Cell "public boolean hasAltPinMappings()"
+   - com.xilinx.rapidwright.design.Cell "public Map<String,AltPinMapping> getAltPinMappings()"
+   - com.xilinx.rapidwright.design.Cell "public boolean isLocked()"
+   - com.xilinx.rapidwright.design.Cell "public void setNullBEL(boolean b)"
+   - com.xilinx.rapidwright.design.Cell "public boolean isNullBEL()"
+   - com.xilinx.rapidwright.design.Cell "public void setLocked(boolean isLocked)"
+   - com.xilinx.rapidwright.design.Cell "public void setRoutethru(boolean isRoutethru)"
+   - com.xilinx.rapidwright.design.Cell "public void setType(String type)"
+   - com.xilinx.rapidwright.design.Cell "public void setAltBlockedSiteType(SiteTypeEnum typeEnum)"
+   - com.xilinx.rapidwright.design.Cell "public SiteTypeEnum getAltBlockedSiteType()"
+   - com.xilinx.rapidwright.design.SiteInst "public boolean isSiteLocked()"
+   - com.xilinx.rapidwright.design.SiteInst "public void setSiteLocked(boolean isSiteLocked)"
+
+
+============= RapidWright 2020.1.1-beta released on 2020-08-07 ================
+Notes:
+ * Minor update with API additions
+ * Adds an alternative source pin to Nets (for dual output scenarios)
+ - API Additions:
+   - com.xilinx.rapidwright.design.Design "public static readCheckpoint(String dcpFileName, String edfFileName, CodePerfTracker t)"
+   - com.xilinx.rapidwright.design.Net "public SitePinInst getAlternateSource()"
+   - com.xilinx.rapidwright.design.Net "public void setAlternateSource(SitePinInst altSource)"
+   - com.xilinx.rapidwright.design.SiteInst "public BELPin[] getSiteWirePins(String siteWireName)"
+   - com.xilinx.rapidwright.design.SiteInst "public BELPin[] getSiteWirePins(int siteWireIdx)"
+   - com.xilinx.rapidwright.design.SiteInst "public String[] getSiteWires()"
+   - com.xilinx.rapidwright.design.SiteInst "public String[] getSitePinNames()"
+   - com.xilinx.rapidwright.design.SiteInst "public int getHighestSitePinInputIndex()"
+   - com.xilinx.rapidwright.design.SiteInst "public boolean isSitePinInput(String pinName)"
+   - com.xilinx.rapidwright.design.SiteInst "public boolean isSitePinOutput(String pinName)"
+   - com.xilinx.rapidwright.device.Node "public IntentCode getIntentCode()"
+
+============= RapidWright 2020.1.0-beta released on 2020-07-31 ================
+Notes:
+ * Coresponds to the Vivado 2020.1 release, all device models consistent
+ * Fixed an issue where timing designs would not open in Vivado
+ * Adds utility method (DesignTools.createMissingSitePinInsts()) to
+   create missing SitePinInsts to nets to faciltiate routing.
+ * Changes hashCode() and equals() on PIP class to ignore flags, only
+   includes tile and wire names
+ - API Additions:
+   - com.xilinx.rapidwright.design.Design "public ModuleInst createModuleInst(String name, Module module, boolean includePortRouting)"
+   - com.xilinx.rapidwright.design.Design "public void copyPartitionPins(Design source, ModuleInst dest, Map<EDIFPort,EDIFPort> portMap)"
+   - com.xilinx.rapidwright.design.Design "public void trimPartitionPins(Pair<Tile,Tile> range)"
+   - com.xilinx.rapidwright.design.Net "public void trimPartitionPins(Pair<Tile,Tile> range)"
+   - com.xilinx.rapidwright.device.BELPin "public SitePin getSitePin(Site site)" 
+   - com.xilinx.rapidwright.device.BELPin "public Node getExternalNode(Site site)" 
+   - com.xilinx.rapidwright.device.Node "public List<Node> getAllUphillNodes()"
+   - com.xilinx.rapidwright.device.Node "public List<PIP> getAllUphillPIPs()"
+   - com.xilinx.rapidwright.device.PIP "public boolean isReversed()"
+   - com.xilinx.rapidwright.device.PIP "public void setIsReversed(boolean isReversed)"
+ - API Refactored:
+   - com.xilinx.rapidwright.device.Site "public Node getConnectedNode(int pinIndex)"
+     - getconnectedNode(int pinIndex) --> getConnectedNode(int pinIndex)
+ - Bug Fixes / Pull Requests:
+   - Issue #70 - Fixes NPE when EDIFCellInst is null on Cell.
+   - Issue #35 - Missing SitePinInsts for placed-only designs.
+   - Pull Request #68 - Fixed getLUTSize(), proper processing of LUT size/parsing.
+   - Other bug fixes (see commit log for details).   
+
+============= RapidWright 2019.2.2-beta released on 2020-06-03 ================
+Notes:
+ * Minor feature: 
+   - Support to manage/load EDIF files with blackboxes where encrypted
+     IP is not populated. 
+   - Adds a very basic Makefile to compile without Gradle on
+     Linux-based platforms.
+ - API Additions:
+   - com.xilinx.rapidwright.device.Device "public int getSiteTypeCount()"
+   - com.xilinx.rapidwright.device.Device "public int getTileTypeCount()"
+   - com.xilinx.rapidwright.device.Site "public int getSiteWireCount()"
+   - com.xilinx.rapidwright.device.Site "public String getSiteWireName(int wireIndex)"
+   - com.xilinx.rapidwright.device.Site "public int getSitePinCount()"
+   - com.xilinx.rapidwright.device.Site "public int getHighestInputPinIndex()"
+   - com.xilinx.rapidwright.device.Site "public boolean isInputPin(int pinIndex)"
+   - com.xilinx.rapidwright.device.Site "public boolean isOutputPin(int pinIndex)"
+   - com.xilinx.rapidwright.device.Site "public SitePIP[] getSitePIPs()"
+   - com.xilinx.rapidwright.device.Site "public SitePIP getSitePIP(int index)"
+   - com.xilinx.rapidwright.device.Site "public int getSitePIPCount()"
+   - com.xilinx.rapidwright.device.Site "public String[] getSiteWireNames()"
+   - com.xilinx.rapidwright.device.Tile "public int getTilePatternIndex()"
+
+ - Bug Fixes / Pull Requests:
+   - Issue #4 - Java 9 Compliance
+      - Updates several libraries and provides a workaround for Kryo
+      to avoid Illegal access messages from JVM
+   - Pull Request #58 - Fixed file naming issues when having multiple instances of an IP
+   - Pull Request #60 - Horizontal density (pblock creation)
+   - Pull Request #62 - Ensure that highlighted tile numbers are drawn above tile highlighting
+   - Other bug fixes (see commit log for details).   
+
+
+============= RapidWright 2019.2.1-beta released on 2020-03-10 ================
+Notes:
+ * Minor feature: 
+     Module and ModuleInst information for physical hierarchy in
+     designs is now stored with DCP files.
+ - API Additions:
+   - com.xilinx.rapidwright.design.Design "public Cell createAndPlaceCell(String name, Unisim cellType, String location, String...params)"
+   - com.xilinx.rapidwright.design.Design "public Cell createAndPlaceCell(EDIFCell parent, String name, Unisim cellType, String location, String...params)"
+   - com.xilinx.rapidwright.design.Design "public boolean renameSiteInst(SiteInst inst, String newName)"
+   - com.xilinx.rapidwright.device.BELPin "public BELPin getSourcePin()"
+   - com.xilinx.rapidwright.design.SiteInst "public SitePIP getSitePIP(BELPin inputPin)"
+   - com.xilinx.rapidwright.design.Cell "public Map<String,String> getPinMappingsL2P()"
+   - com.xilinx.rapidwright.device.ClockRegion "public boolean hasTileColumn(int colIndex)"
+   - com.xilinx.rapidwright.design.Design "public void addModuleImpls(ModuleImpls modImpls)"
+ - Bug Fixes / Pull Requests:
+   - Issue #56 - EDIF Parser fails on submodules with certain characters in their names
+   - Pull Request #57 - TimingGroup: Make 'add' functions public
+   - Pull Request #59 - Delay model changes (DelayModel interface is public, uses SiteTypeEnum instead of String)
+   - Other bug fixes (see commit log for details).   
+
+
+============= RapidWright 2019.2.0-beta released on 2019-12-11 ================
+Notes:
+ * Major feature: 
+     Timing model and graph (published work at FPT 2019). Provides a
+     data path delay model for UltraScale+ interconnect and logic.
+     Provides approximate timing delays with ~2% error or less
+     on average.  See com.xilinx.rapidwright.timing package and
+     documentation for details.
+
+ - API Additions:
+   - com.xilinx.rapidwright.design.Cell "public Tile getTile()"
+   - com.xilinx.rapidwright.design.ClockRegion "public static void calculateFrameECC(int[] frame, int[] mask)"
+   - com.xilinx.rapidwright.design.ClockRegion "public SLR getSLR()"
+   - com.xilinx.rapidwright.design.ClockRegion "public boolean containsTile(Tile tile)"
+   - com.xilinx.rapidwright.device.Device "public SLR getMasterSLR()"
+   - com.xilinx.rapidwright.device.Device "public SLR getSLRByConfigOrderIndex(int cfgOrderIdx)"
+   - com.xilinx.rapidwright.device.SLR "public Device getDevice()"
+   - com.xilinx.rapidwright.device.SLR "public Series getSeries()"
+   - com.xilinx.rapidwright.device.SLR "public Collection<ClockRegion> getClockRegions()"
+   - com.xilinx.rapidwright.device.SLR "public ClockRegion getClockRegion(String name)"
+   - com.xilinx.rapidwright.device.SLR "public boolean hasClockRegion(String name)"
+   - com.xilinx.rapidwright.device.SLR "public boolean containsTile(Tile tile)"
+   - com.xilinx.rapidwright.device.SLR "public int getNumOfClockRegionRows()"
+   - com.xilinx.rapidwright.device.SLR "public int getNumOfClockRegionColumns()"
+   - com.xilinx.rapidwright.device.Tile "public SLR getSLR()"
+ - Deprecated APIs:
+   - com.xilinx.rapidwright.device.Device "public String getDeviceName()"
+ - Bug Fixes:
+   - Issue #51 - Missing macro proimitive definitions (DSP48E2)
+   - Issue #52 - Re-enabled compact module format
+   - Issue #54 - Fixed SLR name/index mismatch   
+   - Several other bug fixes (see commit log for details).   
+
+============= RapidWright 2019.1.2-beta released on 2019-09-30 ================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.design.Cell "public Map<SiteTypeEnum,Set<String>> getCompatiblePlacements()"
+   - com.xilinx.rapidwright.device.PIP "public PIP(PIP prototype, Tile newTile)"
+   - com.xilinx.rapidwright.design.Design "public static EDIFLibrary getMacroPrimitives(Series s)"
+   - com.xilinx.rapidwright.design.Design "public Cell createCell(String instName, Unisim unisim)"
+   - com.xilinx.rapidwright.device.Device "public String getName()"
+   - com.xilinx.rapidwright.device.Device "public SLR[] getSLRs()"
+   - com.xilinx.rapidwright.device.SLR "public String toString()"
+   - com.xilinx.rapidwright.device.SLR "public String getName()"
+ - Deprecated APIs:
+   - com.xilinx.rapidwright.device.Device "public String getDeviceName()" 
+ - Adds macro primitive expansion/translation and turns it on by
+   default when loading EDIF/DCPs -- eliminates problems in netlist
+   traversal and matches Vivado behavior on EDIF load
+ - Fixes an issue when creating designs from scratch for certain
+   devices not being loaded correctly in Vivado 
+ - Updates device data to include SLR CONFIG_ORDER_INDEX property
+ - Adjusts whitespace output in EDIF writer to more closely match Vivado generated 
+   EDIF files
+ - Several bug fixes (see commit log for details).   
+
+============= RapidWright 2019.1.1-beta released on 2019-08-07 =================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.design.Design "public boolean removeSiteInst(SiteInst instance, boolean keepSitePinRouting)"
+   - com.xilinx.rapidwright.design.Net "public Set<SiteInst> getSiteInsts()"
+ - Removed APIs:
+   - com.xilinx.rapidwright.design.SitePinInst "public ArrayList<Cell> getConnectedCells()"
+   - com.xilinx.rapidwright.design.Design "public HashMap<String,EDIFPort> getNetlistPortMap()"
+ - Improved GraalVM compatibility for C++ shared library creation.
+   Some data files were being loaded using certain Kryo APIs that are
+   incompatible with the native compilation flow in GraalVM.  This
+   release replaced those APIs and improved startup time for use of
+   those files by >10X (1.2 secs -> 0.1 secs).
+ - Fixes a subtle internal site routing issue when creating module instances.  Most
+   commonly seen on BRAMs with REGCLK* pins.  This ensures internal site routing
+   matches to original template SiteInst.
+ - Several bug fixes (see commit log for details).   
+
+============= RapidWright 2019.1.0-beta released on 2019-07-01 =================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.device.Node "public boolean isTiedToGnd()"
+   - com.xilinx.rapidwright.device.Node "public boolean isTiedToVcc()"
+   - com.xilinx.rapidwright.device.Node "public boolean isTied()"
+   - com.xilinx.rapidwright.design.Cell "public List<String> getAllPhysicalPinMappings(String logicalPin)"
+   - com.xilinx.rapidwright.design.Net "public boolean rename(String newName)"
+ - Deprecated APIs:
+   - com.xilinx.rapidwright.design.SitePinInst "public ArrayList<Cell> getConnectedCells()"
+   - com.xilinx.rapidwright.design.Design "public HashMap<String,EDIFPort> getNetlistPortMap()"
+ - Bug Fixes:
+   - Issue #32 - Adding the tied value of a node, see API additions above.
+   - Issue #29 - Site.getIntTile() issues
+   - Issue #12,#28 - Inserting 'src' folder as parent to 'com' folder.
+   - Issue #33 - Fixes for createIBUFDS()
+   - Issue #34 - Design.getNetlistPortMap() deprecated
+   - Issue #36 - Updating Javadoc to reflect Routethru behavior
+   - Issue #37 - Added getAllPhysicalPinMappings()
+   - Issue #38,#39 - Created DesignTools.getConnectedCells(SitePinInst)
+ - Support for Vivado 2019.1 devices.
+ - Changes to enable GraalVM shared library compilation for
+   interoperability with C++ (see documentation for tutorial details).
+ - Several bug fixes (see commit log for details).   
+ 
+
+============= RapidWright 2018.3.3-beta released on 2019-04-26 =================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.design.Cell "public boolean copyCell(String name, EDIFCellInst edifCellInst)"
+   - com.xilinx.rapidwright.design.Cell "public boolean copyCell(String name, EDIFCellInst edifCellInst, SiteInst i)"
+   - com.xilinx.rapidwright.device.Node "public Node(RouteNode routeNode)"
+   - com.xilinx.rapidwright.device.Node "public Node getStartNode()"
+   - com.xilinx.rapidwright.device.Node "public Node getEndNode()"
+   - com.xilinx.rapidwright.device.Node "public Node getStartRouteNode()"
+   - com.xilinx.rapidwright.device.Node "public Node getEndRouteNode()"
+   - com.xilinx.rapidwright.design.Module "public void setValidPlacements(ArrayList<Site> placements)"
+ - Adds stamp-based placement.  For designs with multiple instances of the same cell, this
+   ability allows users to take an already placed and routed copy of the cell and apply that
+   placement and routing to the various instances.  See DesignTools.stampPlacement() or 
+   com.xilinx.rapidwright.examples.StampPlacement.java.
+ - Several bug fixes (see commit log for details).   
+ 
+ 
+============= RapidWright 2018.3.2-beta released on 2019-03-28 =================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.design.Cell "public boolean updateName(String newCellName)"
+   - com.xilinx.rapidwright.design.Cell "public boolean isPlaced()"
+   - com.xilinx.rapidwright.design.Design "public Cell addCell(Cell c)"
+   - com.xilinx.rapidwright.design.Design "public void addSiteInst(SiteInst inst)";
+   - com.xilinx.rapidwright.design.Design "public Net addNet(Net net)";
+   - com.xilinx.rapidwright.design.Net "public boolean updateName(String newName)"
+ - Fixes an issue related to creating a module instance if the cell instance isn't already present in the netlist
+ - Adds return value for
+ - com.xilinx.rapidwright.design.Design.removeNet(*), returns the net that was removed or null if unsuccessful
+ - Changed behavior of com.xilinx.rapidwright.design.Design.removeSiteInst(SiteInst) -- now only unroutes portions of nets connected to SiteInst rather than the entire net.
+ - Fixed potential NPE case in com.xilinx.rapidwright.design.Design.removeCell(Cell).
+ - Changed com.xilinx.rapidwright.design.Net.addPins(ArrayList<SitePinInst>) to accept List<SitePinInst>.
+ - Fixed an issue when unrouting partial nets in com.xilinx.rapidwright.design.Net.unroute().
+
+============= RapidWright 2018.3.1-beta released on 2019-02-27 =================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.design.Design "public SiteInst createSiteInst(Site site)"
+   - com.xilinx.rapidwright.design.Design "public SiteInst createSiteInst(String siteName)"
+   - com.xilinx.rapidwright.design.Design "public SiteInst createSiteInst(String name, SiteTypeEnum type, Site placement)"
+   - com.xilinx.rapidwright.design.SiteInst "public Cell getCell(BEL bel)"
+   - com.xilinx.rapidwright.design.Cell "public Map<EDIFName, EDIFPropertyValue> getProperties()"
+   - com.xilinx.rapidwright.design.Cell "public void setProperties(Map<EDIFName, EDIFPropertyValue> properties)"
+ - API Removals (deprecated):
+   - com.xilinx.rapidwright.design.SiteInst "public void addSitePIP(String belName, String inputPin, String outputPin)"
+   - com.xilinx.rapidwright.design.SiteInst "public SitePIP getSitePIP(String belName, String inputPin, String outputPin)"
+   - com.xilinx.rapidwright.device.Site "public BELPin[] getConnectedBELPins(int siteWireIndex)"
+   - com.xilinx.rapidwright.device.Site "public SitePIP getSitePIP(BELPin input, BELPin output)"
+ - Changed the toString() method on SiteInst class to help address issue #23
+ - Improved the error message when trying to create and place a transformed prim (issue #22)
+ - Removed the Hessian library, no longer used
+ - Fixes issue with SLRCrossingGenerator DCPs not always working with Vivado's clock router
+ - Adds preliminary support for SAT routing
+ - Pblock support for PerformanceExplorer
+
+============= RapidWright 2018.3.0-beta released on 2019-01-10 =================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.design.SiteInst "public void addSitePIP(String belName, String inputPin)"
+   - com.xilinx.rapidwright.design.SiteInst "public SitePIP getSitePIP(String belName, String inputPin)"
+   - com.xilinx.rapidwright.design.SiteInst "public Set<String> getSiteWiresFromNet(Net net)"
+   - com.xilinx.rapidwright.device.Device "public Node getNode(String name)"
+   - com.xilinx.rapidwright.device.Device "public Wire getWire(String name)"
+   - com.xilinx.rapidwright.device.Device "public PIP getPIP(String name)"
+   - com.xilinx.rapidwright.device.Device "public SitePin getSitePin(String name)"
+   - com.xilinx.rapidwright.device.Site "public Integer getSiteWireIndex(String siteWireName)"
+   - com.xilinx.rapidwright.device.Site "public BELPin[] getBELPins(int siteWireIndex)"
+   - com.xilinx.rapidwright.device.Site "public BELPin[] getBELPins(String siteWireName)"
+   - com.xilinx.rapidwright.device.Site "public SitePIP getSitePIP(BELPin input)"
+   - com.xilinx.rapidwright.device.Wire "public Node getNode()"
+ - Deprecated APIs:
+   - com.xilinx.rapidwright.design.SiteInst "public void addSitePIP(String belName, String inputPin, String outputPin)"
+   - com.xilinx.rapidwright.design.SiteInst "public SitePIP getSitePIP(String belName, String inputPin, String outputPin)"
+   - com.xilinx.rapidwright.device.Site "public BELPin[] getConnectedBELPins(int siteWireIndex)"
+   - com.xilinx.rapidwright.device.Site "public SitePIP getSitePIP(BELPin input, BELPin output)"
+ - Compatibility with Vivado 2018.3.0 and its devices
+ - Adds support for RapidWright Jupyter Notebook kernels
+ - Reduces device file size to improve download times and load times
+ - Removes Hessian implementation dependency for PartNameTools resource file and
+   ModuleCache files.  This was done to resolve Java >=9 issues with 
+   obsolete reflection usage.
+ - Removed com.xilinx.rapidwright.edif.InstPair class and replaced functionality
+   with com.xilinx.rapidwright.edif.EDIFHierCellInst.
+   
+============= RapidWright 2018.2.5-beta released on 2018-11-28 =================
+Notes:
+ - Fixes an issue in
+ com.xilinx.rapidwright.device.Tile.getWireConnections() that was
+ causing an issue when routing clocking routes.  This was manifesting
+ in the SLRCrosserGenerator demo.
+Known Issues:
+ - Netlists that have two ports by same name where one is a single bit
+ bus and another is multi-bit are not currently supported (for
+ example, a module has an input 'my_signal' and 'my_signal[2:0]' is
+ currently not allowed in the EDIF parser.
+ - Clock router in Router class is disabled (under development).  
+ - PolynomialGenerator is a toy demonstration and does not produce a
+ functionally valid circuit.  
+
+============= RapidWright 2018.2.4-beta released on 2018-11-15 =================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.design.SiteInst "public boolean unrouteIntraSiteNet(BELPin src, BELPin snk)"
+   - com.xilinx.rapidwright.design.SitePinInst "public void setSiteInst(SiteInst instance, boolean keepRouting"
+   - com.xilinx.rapidwright.device.Wire "public ArrayList<PIP> getBackwardPIPs()"
+   - com.xilinx.rapidwright.device.Wire "public ArrayList<PIP> getForwardPIPs()"
+ - API Removals:
+   - com.xilinx.rapidwright.device.Wire "public ? getBackwardPIPs()"
+   - com.xilinx.rapidwright.device.Wire "public ? getForwardPIPs()"
+ - Resolves issues: #14, 15
+Known Issues:
+ - Netlists that have two ports by same name where one is a single bit
+ bus and another is multi-bit are not currently supported (for
+ example, a module has an input 'my_signal' and 'my_signal[2:0]' is
+ currently not allowed in the EDIF parser.
+ - Clock router in Router class is disabled (under development).  
+ - PolynomialGenerator is a toy demonstration and does not produce a
+ functionally valid circuit.  
+
+============= RapidWright 2018.2.3-beta released on 2018-10-29 =================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.design.Design "public Cell createAndPlaceIOB(String name, PinType dir, String pkgPin, String ioStandard, Net portNet, EDIFNet logNet)"
+   - com.xilinx.rapidwright.design.Design "public Cell placeIOB(EDIFCellInst bufInst, String pkgPin, String ioStandard)"
+ - API Removals:
+   - com.xilinx.rapidwright.design.Design "public EDIFCellInst createIBUF(String portName, Site site, Net portNet, EDIFNet logNet, String ioStandard)"
+   - com.xilinx.rapidwright.design.Design "public Cell createOBUF(String portName, Site site, Net portNet, EDIFNet logNet, String ioStandard)"
+      
+ - Enables fix to run HandPlacer in both modes of BlockStitcher (rapid_compile_ipi)
+ - Fixes routing issue when loading two different devices
+ - Fixes some issues related to creating top-level ports
+ - Removes artificial anchor for Modules that do not have internal logic (anchor is allowed to be null)
+ - Resolves issue: #8
+Known Issues:
+ - Netlists that have two ports by same name where one is a single bit
+ bus and another is multi-bit are not currently supported (for
+ example, a module has an input 'my_signal' and 'my_signal[2:0]' is
+ currently not allowed in the EDIF parser.
+ - Clock router in Router class is disabled (under development).  
+ - PolynomialGenerator is a toy demonstration and does not produce a
+ functionally valid circuit.  
+
+============= RapidWright 2018.2.2-beta released on 2018-10-20 =================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.device.PIP "public boolean isRouteThru()"
+   - com.xilinx.rapidwright.device.Site "public BEL[] getBELs()"
+   - com.xilinx.rapidwright.design.SiteInst "public BEL[] getBELs()"
+   - com.xilinx.rapidwright.design.SiteInst "public String getPrimarySitePinName(String alternateSitePinName)"
+   - com.xilinx.rapidwright.design.SiteInst "public String getAlternateSitePinName(String primarySitePinName)"
+   - com.xilinx.rapidwright.design.Module "public PBlock getPBlock()"
+   - com.xilinx.rapidwright.design.Module "public void setPBlock(PBlock pblock)"
+   - com.xilinx.rapidwright.design.Module "public Map<String, String> getMetaDataMap()"
+   - com.xilinx.rapidwright.design.Module "public void setMetaDataMap(HashMap<String, String> metaDataMap)"
+   
+ - API Removals:
+   - com.xilinx.rapidwright.design.Module "public String[] getExternalInputNames()"
+   - com.xilinx.rapidwright.design.Module "public void setExternalInputNames(String[] externalInputNames)"
+   - com.xilinx.rapidwright.design.Module "public String[] getExternalOutputNames()"
+   - com.xilinx.rapidwright.design.Module "public void setExternalOutputNames(String[] externalOutputNames)"
+   - com.xilinx.rapidwright.design.Module "public HashMap<String, ArrayList<String>> getMetaDataMap()"
+   - com.xilinx.rapidwright.design.Module "public void setMetaDataMap(HashMap<String, ArrayList<String>> metaDataMap)"
+   
+ - API Renames:
+   - com.xilinx.rapidwright.design.Module "public String getPBlock()" --> "public String getPBlockString()" 
+ - Changes Implementation Guide File extension from '.impl.guide' to '.igf'
+ - Fixed an issue in the HandPlacer where it would fail to start because of some missing saveDesign() methods.
+ - Modules now store PBlocks when using the rapid_compile_ipi flow
+ - If no impl guide file is supplied, rapid_compile_ipi will create an example file
+ - enables non-LUT routethrus in Router
+ - Resolves issue: #7
+Known Issues:
+ - Netlists that have two ports by same name where one is a single bit
+ bus and another is multi-bit are not currently supported (for
+ example, a module has an input 'my_signal' and 'my_signal[2:0]' is
+ currently not allowed in the EDIF parser.
+ - Clock router in Router class is disabled (under development).  
+ - PolynomialGenerator is a toy demonstration and does not produce a
+ functionally valid circuit.  
+
+============= RapidWright 2018.2.1-beta released on 2018-10-15 =================
+Notes:
+ - API Additions:
+   - com.xilinx.rapidwright.device.Site "public SiteTypeEnum[] getAlternateSiteTypeEnums()"
+   - com.xilinx.rapidwright.design.SiteInst "public SiteTypeEnum getPrimarySiteTypeEnum()"
+   - com.xilinx.rapidwright.design.SiteInst "public SiteTypeEnum[] getAlternateSiteTypeEnums()"
+ - API Removals:
+   - com.xilinx.rapidwright.device.Site "public SiteType getPrimarySiteType()"
+ - Resolves issues: #5, #6
+ - Preliminary tutorial for running IP Integrator flow (rapid_compile_ipi)
+Known Issues:
+ - Netlists that have two ports by same name where one is a single bit
+ bus and another is multi-bit are not currently supported (for
+ example, a module has an input 'my_signal' and 'my_signal[2:0]' is
+ currently not allowed in the EDIF parser.
+ - Clock router in Router class is disabled (under development).  
+ - PolynomialGenerator is a toy demonstration and does not produce a
+ functionally valid circuit.  
+ - Issue #4 - JDK9 Compliance for some 3rd party libraries prints out warnings
+
+============= RapidWright 2018.2.0-beta released on 2018-10-01 =================
+Notes:
+ - Initial release with new RapidWright API Library 
+Known Issues:
+ - Netlists that have two ports by same name where one is a single bit
+ bus and another is multi-bit are not currently supported (for
+ example, a module has an input 'my_signal' and 'my_signal[2:0]' is
+ currently not allowed in the EDIF parser.
+ - Clock router in Router class is disabled (under development).  
+ - PolynomialGenerator is a toy demonstration and does not produce a
+ functionally valid circuit.  
+ - Issue #4 - JDK9 Compliance for some 3rd party libraries prints out warnings
+

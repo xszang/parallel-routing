@@ -1,0 +1,2 @@
+router=cufr
+python3 ./compute-score.py logicnets_jscl_$router boom_med_pb_$router vtr_mcml_$router rosetta_fd_$router corundum_25g_$router finn_radioml_$router vtr_lu64peeng_$router corescore_500_$router corescore_500_pb_$router mlcad_d181_lefttwo3rds_$router koios_dla_like_large_$router boom_soc_$router ispd16_example2_$router

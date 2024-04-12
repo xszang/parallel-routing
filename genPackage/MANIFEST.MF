@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Main-Class: com.xilinx.rapidwright.fpga24_routing_contest.PartialRouterPhysNetlist
+Class-Path: jars/zstd-jni-1.5.5-1.jar
+  jars/kryo-5.2.1.jar
+  jars/jgrapht-core-1.3.0.jar
+  jars/runtime-0.1.13.jar
+  jars/jopt-simple-5.0.4.jar
+  jars/jython-standalone-2.7.2.jar
+  jars/protobuf-java-3.25.0.jar
+  jars/annotations-20.1.0.jar
+  jars/jupyter-kernel-jsr223-1.0.1.jar
+  jars/jeromq-0.5.2.jar
+  jars/commons-cli-1.2.jar
+  jars/json-20160810.jar
+  jars/jzlib-1.1.3.jar
+  jars/commons-io-2.11.0.jar
+  jars/qtjambi-linux64-gcc-4.5.2_01.jar
+  jars/rapidwright-api-lib-2023.2.1.jar
+  jars/rapidwright-api-lib-2023.2.1-javadoc.jar
+  jars/reflectasm-1.11.9.jar
+  jars/objenesis-3.2.jar
+  jars/minlog-1.3.1.jar
+  jars/jheaps-0.9.jar
+  jars/jnacl-1.0.0.jar
+  jars/qtjambi-4.5.2_01.jar
+

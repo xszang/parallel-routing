@@ -1,0 +1,234 @@
+
+buildscript {
+    gradle.ext.rapidwrightDir = "."
+}
+
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'signing'
+}
+
+apply from: 'common.gradle'
+
+mainClassName = "com.xilinx.rapidwright.MainEntrypoint"
+def standaloneClassName = "com.xilinx.rapidwright.StandaloneEntrypoint"
+def preserveDir = ".preserveBin"
+
+def read_rapidwright_version() {
+    def sw = new StringWriter()
+    file('.github/workflows/build.yml').filterLine(sw) {
+        line -> line.contains('RAPIDWRIGHT_VERSION:')
+    }
+    return sw.toString().replace("RAPIDWRIGHT_VERSION: v", "").replace("-beta", "").trim() + ""
+}
+def rapidwright_version = project.hasProperty('override_rapidwright_version') ? override_rapidwright_version : read_rapidwright_version()
+
+// Skipping test-fixtures for publication, see https://github.com/Xilinx/RapidWright/issues/697
+components["java"].withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
+components["java"].withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
+
+dependencies {
+    api 'com.xilinx.rapidwright:rapidwright-api-lib:' + rapidwright_version
+    api 'com.xilinx.rapidwright:rapidwright-api-lib:' + rapidwright_version + ':javadoc'
+}
+
+sourceSets {
+  main {
+    java.destinationDirectory.fileValue(file('bin'))
+    java {
+      srcDirs = ['src']
+    }
+  }
+  test {
+    java {
+      srcDirs = ['test/src']
+    }
+  }
+  testFixtures {
+    java {
+      srcDirs = ['test/shared']
+    }
+    resources {
+      srcDirs = ['test/resources']
+    }
+  }
+}
+
+task preserveBin(type: Copy) {
+     from "bin/rapidwright", "bin/rapidwright.bat"
+     into preserveDir
+}
+
+task copyJars(type: Copy) {
+    from configurations.api
+    into 'jars'
+    //testFixturesImplementation contains the output jar, as well as an implicit dependency on the task.
+    //Filter to remove the jar itself, getFiles() to remove the implicit dependency
+    from configurations.testFixturesImplementation.filter { !tasks.getByName("jar").outputs.files.contains(it) } .getFiles()
+    into 'jars'
+}
+compileJava.dependsOn(copyJars)
+compileJava.dependsOn(preserveBin)
+
+task cleanupScripts(type: Delete) {
+    delete preserveDir
+}
+
+task restoreScripts(type: Copy) {
+    dependsOn(tasks.named("jar"))
+    from preserveDir
+    into 'bin'
+    finalizedBy(cleanupScripts)
+}
+
+run.dependsOn(restoreScripts)
+
+task mainJar(type: Jar, dependsOn: classes) {
+    archiveBaseName = 'main'
+    from sourceSets.main.output include mainClassName
+    manifest {
+        attributes 'Main-Class': mainClassName
+        attributes 'Class-Path': ([destinationDirectory.get().getAsFile().toPath().relativize(sourceSets.main.java.destinationDirectory.get().getAsFile().toPath()).toString() + File.separator]
+            + configurations.implementation.collect { destinationDirectory.get().getAsFile().toPath().relativize(projectDir.toPath()).resolve('jars').resolve(it.getName()) }).join(' ')
+    }
+    finalizedBy(restoreScripts)
+}
+compileJava.finalizedBy(mainJar)
+
+task deleteJars(type: Delete) {
+    delete fileTree('jars')
+}
+
+task updateJars {
+  group = "build setup"
+  description = "Removes all jars from RapidWright/jars and replaces with only necessary dependencies."
+  dependsOn deleteJars
+  dependsOn copyJars
+  copyJars.mustRunAfter deleteJars
+}
+
+task update_jars {
+    group = "build setup"
+    description = "Alias for 'updateJars'."
+    dependsOn updateJars
+}
+
+task sourceJar(type: Jar) {
+  from sourceSets.main.allJava
+  archiveClassifier = "sources"
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.implementation
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = "javadoc"
+}
+
+task standaloneJar (type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.WARN
+    manifest {
+        attributes 'Main-Class': standaloneClassName
+    }
+    archiveBaseName = 'rapidwright-'+rapidwright_version+'-standalone-' + os.charAt(0) + 'in64'
+    from { configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+artifacts {
+    archives javadocJar
+    archives sourceJar
+    archives jar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourceJar
+            artifact javadocJar
+            // rapidwright coordinates
+            groupId = "com.xilinx.rapidwright"
+            artifactId = "rapidwright"
+            version = rapidwright_version
+            pom {
+                name = "RapidWright"
+                description = "Open Source companion framework for Xilinx's Vivado for customizing backend implementation"
+                url = "http://rapidwright.io"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        name = "RapidWright Developers"
+                    }
+                }
+                scm {
+                    connection = 'scm:git@github.com:Xilinx/RapidWright.git'
+                    url ='https://github.com/Xilinx/RapidWright'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username = project.findProperty("ossrhUsername") ?: ""
+                password = project.findProperty("ossrhPassword") ?: ""
+            }
+            url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+        }
+    }
+}
+
+signing {
+    setRequired {
+        // signing is only required when publishing to maven central
+        gradle.taskGraph.allTasks.any { it.equals( publishMavenJavaPublicationToMavenRepository ) }
+    }
+    sign configurations.archives
+    sign publishing.publications.mavenJava
+}
+
+task testPython(type:Test) {
+  group = "verification"
+  description = "Runs the Python unit tests."
+  doFirst {
+    // Necessary because gradle will try and match against Java tests
+    filter.setFailOnNoMatchingTests(false)
+  }
+  doLast {
+    exec {
+      environment 'CLASSPATH', sourceSets.main.runtimeClasspath.getAsPath()
+      executable = 'python3'
+      args = ['-m', 'pytest', '--junitxml', '$buildDir/test-results/testPython/testPython.xml', '--rootdir', 'python/test']
+      // Enable verbose flag which prints out a pass/fail for every test
+      args += ['-v']
+      // Prevent python/tests/... with the same namespace as in Java from clobbering
+      args += ['--import-mode=importlib']
+      // Workaround from https://github.com/jpype-project/jpype/issues/842#issuecomment-847027355
+      args += ['-p', 'no:faulthandler']
+      if (!filter.commandLineIncludePatterns.isEmpty()) {
+        args += ['--pyargs'] + filter.commandLineIncludePatterns.stream().map((p) -> 'python.test.' + p).collect(Collectors.toList())
+      }
+    }
+  }
+}
+
+test {
+  dependsOn testPython
+}
+
+task printRapidWrightVersion() {
+    doLast {
+        print(rapidwright_version)
+    }
+}
