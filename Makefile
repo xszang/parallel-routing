@@ -79,9 +79,9 @@ ifneq ($(APPTAINER_NETWORK),none)
 # Also download/generate all device files necessary for the xcvu3p device
 compile-java:
 	_JAVA_OPTIONS="$(JAVA_PROXY)" ./gradlew compileJava
-	#_JAVA_OPTIONS="$(JAVA_PROXY)" bin/rapidwright Jython -c "FileTools.ensureDataFilesAreStaticInstallFriendly('xcvu3p')"
+	_JAVA_OPTIONS="$(JAVA_PROXY)" bin/rapidwright Jython -c "FileTools.ensureDataFilesAreStaticInstallFriendly('xcvu3p')"
 install-python-deps:
-	#pip install -q -r requirements.txt --pre --user
+	pip install -q -r requirements.txt --pre --user
 else
 compile-java install-python-deps:
 	@echo "$@ target skipped since network disabled inside apptainer"
@@ -95,7 +95,7 @@ endif
 # Download and unpack all benchmarks
 .PHONY: download-benchmarks
 download-benchmarks:
-	#curl -L $(BENCHMARKS_URL) | tar -xz
+	curl -L $(BENCHMARKS_URL) | tar -xz
 
 .PRECIOUS: %_unrouted.phys %.netlist
 %_unrouted.phys %.netlist:

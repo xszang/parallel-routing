@@ -1,0 +1,39 @@
+name: Publish Unit Test Results
+
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types:
+      - completed
+
+jobs:
+  publish-test-results:
+    name: Publish Unit Test Results
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.conclusion != 'skipped'
+
+    steps:
+      - name: Download and Extract Artifacts
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          mkdir artifacts && cd artifacts
+
+          artifacts_url=${{ github.event.workflow_run.artifacts_url }}
+          artifacts=$(gh api $artifacts_url -q '.artifacts[] | {name: .name, url: .archive_download_url}')
+
+          IFS=$'\n'
+          for artifact in $artifacts
+          do
+            name=$(jq -r .name <<<$artifact)
+            url=$(jq -r .url <<<$artifact)
+            gh api $url > "$name.zip"
+            unzip -d "$name" "$name.zip"
+          done
+
+      - name: Publish
+        uses: EnricoMi/publish-unit-test-result-action@c6ffacdf2fce00e8222e3a373b87ec805a04bc46
+        with:
+          commit: ${{ github.event.workflow_run.head_sha }}
+          files: "artifacts/**/*.xml"
