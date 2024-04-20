@@ -9,7 +9,7 @@ As depicted in the following figure, given the placement solution, it first buil
 
 More details are in the following paper:
 
-Xinshi Zang, Wenhao Lin, Shiju Lin, Jinwei Liu and Evangeline F.Y. Young. An Open-Source Fast Parallel Routing Approach for Commercial FPGAs. In Proceedings of the Great Lakes Symposium on VLSI 2024. (To appear)
+Xinshi Zang, Wenhao Lin, Shiju Lin, Jinwei Liu and Evangeline F.Y. Young. [An Open-Source Fast Parallel Routing Approach for Commercial FPGAs](doc/glsvlsi24-camera-ready.pdf). In Proceedings of the Great Lakes Symposium on VLSI 2024. (To appear)
 
 ## Requirements
 The requirements follow those of the official [repository](https://github.com/Xilinx/fpga24_routing_contest) of the FPGA'24 routing contest.
